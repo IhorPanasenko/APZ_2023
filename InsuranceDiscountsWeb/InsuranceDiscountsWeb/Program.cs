@@ -1,4 +1,6 @@
 using DAL;
+using DAL.Interfaces;
+using DAL.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -45,6 +47,8 @@ builder.Services.AddAuthentication(auth =>
     };
 });
 
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 
