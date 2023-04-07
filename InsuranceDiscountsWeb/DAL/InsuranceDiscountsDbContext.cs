@@ -1,4 +1,5 @@
 ﻿using Core.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -9,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace DAL
 {
-    public class InsuranceDiscountsDbContext : IdentityDbContext
+    public class InsuranceDiscountsDbContext : IdentityDbContext<IdentityUser>
     {
-        public InsuranceDiscountsDbContext(DbContextOptions options) : base (options)
+        public InsuranceDiscountsDbContext(DbContextOptions<InsuranceDiscountsDbContext> options) : base (options)
         {
                 
         }
