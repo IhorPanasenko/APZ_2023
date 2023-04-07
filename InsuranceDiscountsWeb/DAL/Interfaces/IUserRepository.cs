@@ -11,5 +11,8 @@ namespace DAL.Interfaces
     public interface IUserRepository
     {
         Task<UserManagerResponse> RegisterUserAsync(RegisterModel registerModel);
+        Task<UserManagerResponse> LoginUserAsync(LoginModel loginModel);
+
+        Task<UserManagerResponse> ConfirmEmailAsync(string userId, string token);
     }
 }
