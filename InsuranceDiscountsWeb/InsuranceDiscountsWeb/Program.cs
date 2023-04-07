@@ -1,3 +1,5 @@
+using BLL.Interfaces;
+using BLL.Services;
 using DAL;
 using DAL.Interfaces;
 using DAL.Repositories;
@@ -50,7 +52,25 @@ builder.Services.AddAuthentication(auth =>
 
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddTransient<IMalRepository, MailRepositoriy>();
+builder.Services.AddTransient<IMailRepository, MailRepositoriy>();
+
+
+builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllHeaders",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
 
 var app = builder.Build();
 
@@ -67,5 +87,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.UseCors("AllowAllHeaders");
 
 app.Run();
