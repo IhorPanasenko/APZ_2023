@@ -34,105 +34,14 @@ namespace DAL.Services
             return null;
         }
 
-        public async Task<UserManagerResponse> LoginUserAsync(LoginModel loginModel)
+        public Task<UserManagerResponse> LoginUserAsync(LoginModel loginModel)
         {
-            var user = await userManager.FindByEmailAsync(loginModel.Email);
-
-            if(user is null)
-            {
-                return new UserManagerResponse
-                {
-                    Message = "No user with this email address",
-                    IsSuccess = false,
-                };
-            }
-
-            var result = await userManager.CheckPasswordAsync(user, loginModel.Password);
-
-            if (!result)
-            {
-                return new UserManagerResponse
-                {
-                    Message = "Invalid password",
-                    IsSuccess = false,
-                };
-            }
-
-            var claims = new[]
-            {
-                new Claim("Email", loginModel.Email),
-                new Claim("UserId", user.Id),
-            };
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["AuthSettings:Key"]));
-
-            var token = new JwtSecurityToken(
-                issuer: configuration["AuthSettings:Issuer"],
-                audience: configuration["AuthSettings:audience"],
-                claims: claims,
-                expires: DateTime.Now.AddDays(30),
-                signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature)
-                );  
-            
-            string tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-
-            return new UserManagerResponse
-            {
-                Message = tokenString,
-                IsSuccess = true,
-                ExpireDate = token.ValidTo
-            };
-
+            throw new NotImplementedException();
         }
 
-        public async Task<UserManagerResponse> RegisterUserAsync(RegisterModel registerModel)
+        public Task<UserManagerResponse> RegisterUserAsync(RegisterModel registerModel)
         {
-            if(registerModel == null)
-            {
-                throw new ArgumentNullException("RegisterModel is null");
-            }
-
-            if(registerModel.Password != registerModel.ConfirmPassword)
-            {
-                return new UserManagerResponse
-                {
-                    Message = "Confirm apassword doesn't match the password",
-                    IsSuccess = false
-                };
-            }
-
-            var identityUser = new IdentityUser
-            {
-                Email = registerModel.Email,
-                UserName = registerModel.Email
-            };
-
-            var result = await userManager.CreateAsync(identityUser, registerModel.Password);
-
-            if (!result.Succeeded)
-            {
-                return new UserManagerResponse
-                {
-                    Message = "User didn't created",
-                    IsSuccess = false,
-                    Errors = result.Errors.Select(e => e.Description)
-                };
-            }
-
-            var confirmEmailToken = await userManager.GenerateEmailConfirmationTokenAsync(identityUser);
-            var encodedMailToken = Encoding.UTF8.GetBytes(confirmEmailToken);
-            var validEmailToken = WebEncoders.Base64UrlEncode(encodedMailToken);
-            string url = $"{configuration["AppUrl"]}/api/auth/confirmemail&userid={identityUser.Id}&token{validEmailToken}";
-
-            
-
-            return new UserManagerResponse
-            {
-                Message = "User created Succefully",
-                IsSuccess = true
-            };
-
-          
+            throw new NotImplementedException();
         }
     }
 }
