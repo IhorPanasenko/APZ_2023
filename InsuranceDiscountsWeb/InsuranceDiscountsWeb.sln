@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InsuranceDiscountsWeb", "InsuranceDiscountsWeb\InsuranceDiscountsWeb.csproj", "{204DE720-A20A-4FFE-A4D9-DCC0089752E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InsuranceDiscountsWeb", "InsuranceDiscountsWeb\InsuranceDiscountsWeb.csproj", "{204DE720-A20A-4FFE-A4D9-DCC0089752E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{7E52D965-BCC6-4C28-BC15-727F7E12FB00}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", "{7E52D965-BCC6-4C28-BC15-727F7E12FB00}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL", "BLL\BLL.csproj", "{8587D7E6-7A34-468E-B816-83DC06EF38A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BLL", "BLL\BLL.csproj", "{8587D7E6-7A34-468E-B816-83DC06EF38A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{422D891A-ED8C-4FC1-9203-BFE65026A4A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAL", "DAL\DAL.csproj", "{422D891A-ED8C-4FC1-9203-BFE65026A4A0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
