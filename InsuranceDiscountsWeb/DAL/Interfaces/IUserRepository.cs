@@ -12,7 +12,6 @@ namespace DAL.Interfaces
     {
         Task<UserManagerResponse> RegisterUserAsync(RegisterModel registerModel);
         Task<UserManagerResponse> LoginUserAsync(LoginModel loginModel);
-
-        Task<UserManagerResponse> ConfirmEmailAsync(string userId, string token);
+        //Task<UserManagerResponse> ConfirmEmailAsync(string userId, string token);
     }
 }
