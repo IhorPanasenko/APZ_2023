@@ -12,9 +12,9 @@ namespace InsuranceDiscountsWeb.Controllers
     public class AuthController : ControllerBase
     {
         private IUserRepository _userRepository;
-        private IMalRepository mailRepository;   
+        private IMailRepository mailRepository;   
 
-        public AuthController(IUserRepository userRepository, IMalRepository mailRepository)
+        public AuthController(IUserRepository userRepository, IMailRepository mailRepository)
         {
             _userRepository = userRepository;
             this.mailRepository = mailRepository;

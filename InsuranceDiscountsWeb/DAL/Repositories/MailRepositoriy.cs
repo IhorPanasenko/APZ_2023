@@ -10,7 +10,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace DAL.Repositories
 {
-    public class MailRepositoriy : IMalRepository
+    public class MailRepositoriy : IMailRepository
     {
         private IConfiguration configuration;
 

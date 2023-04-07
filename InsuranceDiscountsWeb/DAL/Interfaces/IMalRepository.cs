@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Interfaces
 {
-    public interface IMalRepository
+    public interface IMailRepository
     {
         Task SendEmailAsync (string toEmail, string subject, string content);
     }

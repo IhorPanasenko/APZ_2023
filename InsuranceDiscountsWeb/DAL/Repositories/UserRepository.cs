@@ -21,7 +21,7 @@ namespace DAL.Services
     {
         private UserManager<IdentityUser> userManager;
         private IConfiguration configuration;
-        private IMailRepositoriy mailRepository;
+        private IMailRepository mailRepository;
         public UserRepository(UserManager<IdentityUser> userManager, IConfiguration configuration, IMailRepository mailRepository)
         {
             this.userManager = userManager;
@@ -31,7 +31,7 @@ namespace DAL.Services
 
         public async Task<UserManagerResponse> ConfirmEmailAsync(string userId, string token)
         {
-            
+            return null;
         }
 
         public async Task<UserManagerResponse> LoginUserAsync(LoginModel loginModel)
@@ -124,7 +124,7 @@ namespace DAL.Services
             var validEmailToken = WebEncoders.Base64UrlEncode(encodedMailToken);
             string url = $"{configuration["AppUrl"]}/api/auth/confirmemail&userid={identityUser.Id}&token{validEmailToken}";
 
-            await
+            
 
             return new UserManagerResponse
             {
