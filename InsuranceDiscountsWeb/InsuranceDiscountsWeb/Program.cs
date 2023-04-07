@@ -1,5 +1,6 @@
 using DAL;
 using DAL.Interfaces;
+using DAL.Repositories;
 using DAL.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -39,16 +40,17 @@ builder.Services.AddAuthentication(auth =>
     {
         ValidateIssuer = true,
         ValidateAudience = true,
-        ValidAudience = "",
-        ValidIssuer = "",
+        ValidAudience = builder.Configuration["AuthSettings:Audience"],
+        ValidIssuer = builder.Configuration["AuthSettings:Issuer"],
         RequireExpirationTime = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("This is the Key that we will use in the encryption")),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["AuthSettings:Key"])),
         ValidateIssuerSigningKey = true
     };
 });
 
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddTransient<IMalRepository, MailRepositoriy>();
 
 var app = builder.Build();
 
@@ -61,6 +63,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
