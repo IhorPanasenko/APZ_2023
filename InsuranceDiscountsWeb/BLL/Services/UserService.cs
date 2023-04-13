@@ -92,7 +92,7 @@ namespace BLL.Services
             {
                 return new UserManagerResponse
                 {
-                    Message = "Confirm apassword doesn't match the password",
+                    Message = "Confirm password doesn't match the password",
                     IsSuccess = false
                 };
             }
