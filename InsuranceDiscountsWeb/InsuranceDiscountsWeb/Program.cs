@@ -55,8 +55,8 @@ builder.Services.AddAuthentication(auth =>
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IMailRepository, MailRepositoriy>();
 
-
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
