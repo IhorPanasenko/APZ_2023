@@ -37,9 +37,10 @@ namespace InsuranceDiscountsWeb.Controllers
                 return ValidationProblem(ModelState);
             }
 
+            var registerModel = convertModel(registerViewModel);
+
             try
             {
-                var registerModel = convertModel(registerViewModel);
                 var result = await accountService.Register(registerModel);
 
                 if (!result)
@@ -64,20 +65,31 @@ namespace InsuranceDiscountsWeb.Controllers
                 return ValidationProblem(ModelState);
             }
 
-            var result = await signInManager.PasswordSignInAsync(loginViewModel.EmailAddress, loginViewModel.Password, false, false);
+            var loginModel = convertModel(loginViewModel);
 
-            if (!result.Succeeded)
+            try
             {
-                return BadRequest(result);
+                var result =await accountService.LogIn(loginModel);
+                return Ok(result);
             }
-
-            return Ok();
+            catch(Exception e)
+            {
+                logger.LogError(e.Message);
+                return BadRequest("Some Unexcpected errors were found^\n"+e.Message)
+            }
         }
 
         [HttpPost("LogOut")]
         public async Task<IActionResult> LogOut()
         {
-            await signInManager.SignOutAsync();
+            try
+            {
+               await accountService.LogOut();
+            }catch(Exception e)
+            {
+                logger.LogError(e.Message);
+            }
+
             return Ok();
         }
 
@@ -89,6 +101,14 @@ namespace InsuranceDiscountsWeb.Controllers
                 UserName = registerViewModel.UserName,
                 Password = registerViewModel.Password,
                 ConfirmPassword = registerViewModel.ConfirmPassword,
+            };
+        }
+
+        private LoginModel convertModel(LoginViewModel loginViewModel){
+            return new LoginModel
+            {
+                Email = loginViewModel.EmailAddress,
+                Password = loginViewModel.Password,
             };
         }
 
