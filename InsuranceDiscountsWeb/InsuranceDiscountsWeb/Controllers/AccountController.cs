@@ -19,7 +19,7 @@ namespace InsuranceDiscountsWeb.Controllers
         private readonly ILogger<AccountController> logger;
         private readonly IAccountService accountService;
 
-        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, ILogger<AccountController> logger, AccountService accountService)
+        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, ILogger<AccountController> logger, IAccountService accountService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
@@ -54,8 +54,6 @@ namespace InsuranceDiscountsWeb.Controllers
                 logger.LogError(e.Message);
                 return BadRequest(e.Message);
             }
-
-
         }
 
         [HttpPost("Login")]
