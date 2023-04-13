@@ -23,9 +23,9 @@ namespace InsuranceDiscountsWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> Register (RegisterViewModel registerViewModel)
         {
-            if (registerViewModel == null)
+            if (!ModelState.IsValid)
             {
-                throw new ArgumentNullException("RegisterModel is null");
+                return BadRequest(ModelState);
             }
 
             if (registerViewModel.Password != registerViewModel.ConfirmPassword)
@@ -36,7 +36,7 @@ namespace InsuranceDiscountsWeb.Controllers
             var identityUser = new IdentityUser
             {
                 Email = registerViewModel.Email,
-                UserName = registerViewModel.Email
+                UserName = registerViewModel.UserName
             };
 
             
