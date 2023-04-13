@@ -103,7 +103,7 @@ namespace BLL.Services
                 UserName = registerModel.Email
             };
 
-            var result = await userManager.CreateAsync(identityUser, registerModel.Password);
+            var result = await userManager.CreateAsync(identityUser);
 
             if (!result.Succeeded)
             {
