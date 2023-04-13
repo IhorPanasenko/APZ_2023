@@ -12,11 +12,11 @@ namespace Core.Models
         [Required]
         [EmailAddress]
         [StringLength(50)]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         [Required]
         [StringLength(50, MinimumLength =5)]
-        public string Password { get; set; }
+        public string? Password { get; set; }
 
     }
 }
