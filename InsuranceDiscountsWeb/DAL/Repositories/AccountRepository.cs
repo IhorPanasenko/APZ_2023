@@ -43,7 +43,7 @@ namespace DAL.Repositories
 
                 if (!result.Succeeded)
                 {
-                    throw new Exception("Can't create new User");
+                    throw new Exception(result.Errors.ToString());
                 }
 
                 return true;
