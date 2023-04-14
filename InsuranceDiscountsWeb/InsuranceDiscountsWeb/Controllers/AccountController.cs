@@ -75,10 +75,11 @@ namespace InsuranceDiscountsWeb.Controllers
             catch(Exception e)
             {
                 logger.LogError(e.Message);
-                return BadRequest("Some Unexcpected errors were found^\n"+e.Message)
+                return BadRequest("Some Unexcpected errors were found^\n" + e.Message);
             }
         }
 
+        [Authorize]
         [HttpPost("LogOut")]
         public async Task<IActionResult> LogOut()
         {
