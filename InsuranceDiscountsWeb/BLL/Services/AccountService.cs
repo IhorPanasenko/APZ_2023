@@ -1,7 +1,6 @@
 ﻿using BLL.Interfaces;
 using Core.Models;
 using DAL.Interfaces;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +12,7 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -44,16 +44,22 @@ namespace BLL.Services
                 throw new ArgumentException("User with such doesn't exist");
             }
 
-            var result = await signInManager.PasswordSignInAsync(loginModel.Email, loginModel.Password, false, false);
+//            var result = await signInManager.PasswordSignInAsync(user.UserName, loginModel.Password, false, false);
+            var result = await userManager.CheckPasswordAsync(user, loginModel.Password);
 
-            if (!result.Succeeded)
+            //if (!result.Succeeded)
+            //{
+            //    if (result.IsNotAllowed)
+            //    {
+            //        throw new ApplicationException("Wrong password");
+            //    }
+
+            //    throw new Exception("This user is not allowed to enter");
+            //}
+
+            if (!result)
             {
-                if (result.IsNotAllowed)
-                {
-                    throw new ApplicationException("Wrong password"):
-                }
-
-                throw new Exception("This user is not allowed to enter");
+                throw new ApplicationException("Wrong password");
             }
 
             var tokenString = generateJwtToken(user);
@@ -103,19 +109,21 @@ namespace BLL.Services
         {
             var claims = new[]{
                 new Claim("Email", user.Email),
+                new Claim ("UserName", user.UserName),
                 new Claim("UserId", user.Id),
             };
 
             try
             {
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["AuthSettings:Key"]));
-
+                var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                
                 var token = new JwtSecurityToken(
                    issuer: configuration["AuthSettings:Issuer"],
                    audience: configuration["AuthSettings:audience"],
                    claims: claims,
                    expires: DateTime.Now.AddDays(30),
-                   signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature)
+                   signingCredentials: credentials
                    );
 
                 string tokenString = new JwtSecurityTokenHandler().WriteToken(token);
