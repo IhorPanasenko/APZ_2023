@@ -1,3 +1,4 @@
+using BLL.Helpers;
 using BLL.Interfaces;
 using BLL.Services;
 using DAL;
@@ -30,7 +31,7 @@ builder.Services.AddSwaggerGen(c =>
         Scheme = "Bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
+        Description = "Authorization, Enter your JWT token here",
     });
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
@@ -58,6 +59,9 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;
     options.Password.RequiredLength = 5;
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(20);
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.SignIn.RequireConfirmedAccount = true;
 }).AddEntityFrameworkStores<InsuranceDiscountsDbContext>()
     .AddDefaultTokenProviders();
 
@@ -80,13 +84,15 @@ builder.Services.AddAuthentication(auth =>
     };
 });
 
-
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IMailRepository, MailRepositoriy>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddTransient<ISendGridEmail, SendGridEmail>();
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+
+builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration.GetSection("SendGridApiKey"));
 
 builder.Services.AddCors(options =>
 {
