@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging.Configuration;
 
 namespace InsuranceDiscountsWeb.Controllers
 {
@@ -18,13 +19,21 @@ namespace InsuranceDiscountsWeb.Controllers
         private readonly SignInManager<IdentityUser> signInManager;
         private readonly ILogger<AccountController> logger;
         private readonly IAccountService accountService;
+        private readonly ISendGridEmail sendGridEmail;
 
-        public AccountController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, ILogger<AccountController> logger, IAccountService accountService)
+        public AccountController(
+            UserManager<IdentityUser> userManager, 
+            SignInManager<IdentityUser> signInManager, 
+            ILogger<AccountController> logger, 
+            IAccountService accountService, 
+            ISendGridEmail sendGridEmail
+            )
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.logger = logger;
             this.accountService = accountService;
+            this.sendGridEmail = sendGridEmail;
         }
 
         [HttpPost]
@@ -92,6 +101,31 @@ namespace InsuranceDiscountsWeb.Controllers
             }
 
             return Ok();
+        }
+
+        [HttpPost("ForgotPassword")]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel forgotPassword)
+        {
+            if (!ModelState.IsValid)
+            {
+                logger.LogError("Model state not valid");
+                return NotFound("Model state not valid");
+            }
+
+            var user = await userManager.FindByEmailAsync(forgotPassword.Email);
+
+            if(user is null)
+            {
+                logger.LogError($"No user was found with email{forgotPassword.Email}");
+                return NotFound($"No user was found with email{forgotPassword.Email}");
+            }
+
+            var code = await userManager.GeneratePasswordResetTokenAsync(user);
+            //var callBackUrl = Url.Action
+
+            await sendGridEmail.SendEmailAsync(forgotPassword.Email, "Reset Email confirmation", "Please, Reset your email + Link");
+
+            return Ok(code);
         }
 
         private RegisterModel convertModel(RegisterViewModel registerViewModel)
