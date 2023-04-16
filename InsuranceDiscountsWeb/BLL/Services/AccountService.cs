@@ -44,7 +44,7 @@ namespace BLL.Services
                 throw new ArgumentException("User with such doesn't exist");
             }
 
-//            var result = await signInManager.PasswordSignInAsync(user.UserName, loginModel.Password, false, false);
+             // var result = await signInManager.PasswordSignInAsync(user.UserName, loginModel.Password, false, lockoutOnFailure: true);
             var result = await userManager.CheckPasswordAsync(user, loginModel.Password);
 
             //if (!result.Succeeded)
