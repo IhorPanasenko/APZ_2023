@@ -92,7 +92,7 @@ builder.Services.AddTransient<ISendGridEmail, SendGridEmail>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 
-builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration.GetSection("SendGridApiKey"));
+builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration.GetSection("SendGrid"));
 
 builder.Services.AddCors(options =>
 {
