@@ -121,11 +121,41 @@ namespace InsuranceDiscountsWeb.Controllers
             }
 
             var code = await userManager.GeneratePasswordResetTokenAsync(user);
-            //var callBackUrl = Url.Action
+            
 
             await sendGridEmail.SendEmailAsync(forgotPassword.Email, "Reset Email confirmation", "Please, Reset your email + Link");
 
             return Ok(code);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword([FromBody]ResetPasswordViewModel resetPassword)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Data validation problems check proper of your email and password");
+            }
+
+            var user = await userManager.FindByEmailAsync(resetPassword.Email);
+
+            if(user is null)
+            {
+                return NotFound("No user with this email. You can't reset password");
+            }
+
+            if(resetPassword.Password != resetPassword.NewPassword)
+            {
+                return BadRequest("Password must match confirmation password");
+            }
+
+            var result = await userManager.ResetPasswordAsync(user, resetPassword.Code, resetPassword.Password);
+
+            if (result.Succeeded)
+            {
+                return Ok($"Password successfully changed to {resetPassword.NewPassword}");
+            }
+
+
         }
 
         private RegisterModel convertModel(RegisterViewModel registerViewModel)
