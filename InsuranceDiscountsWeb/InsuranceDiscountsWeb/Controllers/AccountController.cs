@@ -153,6 +153,15 @@ namespace InsuranceDiscountsWeb.Controllers
             }
         }
 
+        [HttpPost("ExternalLogin")]
+        [AllowAnonymous]
+        public IActionResult ExternalLogin(string provider, string returnUrl)
+        {
+            var redirect = Url.Action("ExternalLoginCallBack", "Account", new { ReturnUrl = returnUrl });
+            var properties = signInManager.ConfigureExternalAuthenticationProperties(provider, redirect);
+            return Challenge(properties, provider);
+        }
+
         private RegisterModel convertModel(RegisterViewModel registerViewModel)
         {
             return new RegisterModel
