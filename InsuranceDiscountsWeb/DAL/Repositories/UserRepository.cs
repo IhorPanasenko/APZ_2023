@@ -73,6 +73,7 @@ namespace DAL.Services
                     var user = convert(usersInRole[j]);
                     if (!appUsers.Contains(user))
                     {
+                        user.UserRoles.Add(roles[i].Name);
                         appUsers.Add(user);
                     }
                     else
