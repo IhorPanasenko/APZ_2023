@@ -12,12 +12,12 @@ namespace InsuranceDiscountsWeb.ViewModels
         [Required]
         [DataType(DataType.Password)]
         [MinLength(5)]
-        public string Password { get; set; }
+        public string NewPassword { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
         [MinLength(5)]
-        public string NewPassword { get; set; }
+        public string ConfirmationNewPassword { get; set; }
 
         [Required]
         public string Code { get; set; }
