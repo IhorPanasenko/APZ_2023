@@ -69,7 +69,8 @@ builder.Services.AddAuthentication(auth =>
 {
     auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(options =>
+})
+    .AddJwtBearer(options =>
 {
     options.SaveToken = true;
     options.TokenValidationParameters = new TokenValidationParameters
@@ -82,7 +83,12 @@ builder.Services.AddAuthentication(auth =>
         ValidIssuer = builder.Configuration["AuthSettings:Issuer"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["AuthSettings:Key"]))
     };
-});
+})
+    .AddGoogle(options =>
+    {
+        options.ClientId = builder.Configuration["web:client_id"];
+        options.ClientSecret = builder.Configuration["web:client_secret"];
+    });
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IMailRepository, MailRepositoriy>();
