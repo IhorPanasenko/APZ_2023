@@ -22,5 +22,7 @@ namespace InsuranceDiscountsWeb.ViewModels
         [StringLength(50, MinimumLength = 5)]
         [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
+
+        public string Role { get; set; }
     }
 }
