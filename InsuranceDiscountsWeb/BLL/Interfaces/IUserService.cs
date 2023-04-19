@@ -10,7 +10,10 @@ namespace BLL.Interfaces
 {
     public interface  IUserService
     {
-        Task<UserManagerResponse> RegisterUserAsync(RegisterModel registerModel);
-        Task<UserManagerResponse> LoginUserAsync(LoginModel loginModel);
+        public Task<List<AppUser>> GetAllUsers();
+        public Task<AppUser?> GetUserByEmail(string email);
+        public Task<AppUser?> GetUserById(string userId);
+        public Task<bool> UpdateUser(string userId, AppUser user);
+        public Task<bool> DeleteUser(string email);
     }
 }
