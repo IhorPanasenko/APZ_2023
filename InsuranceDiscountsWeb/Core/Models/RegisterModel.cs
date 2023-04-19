@@ -25,5 +25,7 @@ namespace Core.Models
         [Required]
         [StringLength(50, MinimumLength = 5)]
         public string ConfirmPassword { get; set; }
+
+        public string Role { get; set; } 
     }
 }
