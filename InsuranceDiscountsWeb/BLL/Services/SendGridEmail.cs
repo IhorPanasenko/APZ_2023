@@ -37,7 +37,7 @@ namespace BLL.Services
             var client = new SendGridClient(apiKey);
             var msg = new SendGridMessage()
             {
-                From = new EmailAddress("rungroops@gmail.com"),
+                From = new EmailAddress("ihor.panasenko1@nure.ua"),
                 Subject = subject,
                 PlainTextContent = message,
                 HtmlContent = message
