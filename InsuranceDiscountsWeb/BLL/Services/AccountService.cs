@@ -90,6 +90,11 @@ namespace BLL.Services
                 throw new Exception("User with this Email already exist");
             }
 
+            if(String.IsNullOrEmpty(registerModel.Role))
+            {
+                registerModel.Role = "User";
+            }
+
             try
             {
                 registerResult = await accountRepository.Register(registerModel);
