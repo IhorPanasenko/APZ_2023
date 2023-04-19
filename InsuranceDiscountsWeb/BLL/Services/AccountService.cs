@@ -25,14 +25,22 @@ namespace BLL.Services
         private readonly ILogger<AccountService> logger;
         private readonly IAccountRepository accountRepository;
         private readonly IConfiguration configuration;
+        private readonly ISendGridEmail sendGridEmail;
 
-        public AccountService(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, ILogger<AccountService> logger, IAccountRepository accountRepository, IConfiguration configuration)
+        public AccountService(
+            UserManager<IdentityUser> userManager, 
+            SignInManager<IdentityUser> signInManager, 
+            ILogger<AccountService> logger, 
+            IAccountRepository accountRepository, 
+            IConfiguration configuration,
+            ISendGridEmail sendGridEmail)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.logger = logger;
             this.accountRepository = accountRepository;
             this.configuration = configuration;
+            this.sendGridEmail = sendGridEmail;
         }
 
         public async Task<string> LogIn(LoginModel loginModel)
@@ -44,18 +52,7 @@ namespace BLL.Services
                 throw new ArgumentException("User with such doesn't exist");
             }
 
-             // var result = await signInManager.PasswordSignInAsync(user.UserName, loginModel.Password, false, lockoutOnFailure: true);
-            var result = await userManager.CheckPasswordAsync(user, loginModel.Password);
-
-            //if (!result.Succeeded)
-            //{
-            //    if (result.IsNotAllowed)
-            //    {
-            //        throw new ApplicationException("Wrong password");
-            //    }
-
-            //    throw new Exception("This user is not allowed to enter");
-            //}
+            var result = await userManager.CheckPasswordAsync(user, loginModel.Password);            
 
             if (!result)
             {
@@ -103,6 +100,41 @@ namespace BLL.Services
             }
 
             return registerResult;
+        }
+
+        public async Task<string> ForgotPassword(string email)
+        {
+            var user = await userManager.FindByEmailAsync(email);
+
+            if (user is null)
+            {
+                throw new Exception($"No user was found with email {email}");
+            }
+
+            var code = await userManager.GeneratePasswordResetTokenAsync(user);
+
+            await sendGridEmail.SendEmailAsync(email, "Reset Email confirmation", "Please, Reset your email + Link");  //TODO: Add link to page for reset Password
+
+            return code;
+        }
+        public async Task<bool> ResetPassword(ResetPasswordModel resetPassword)
+        {
+
+            var user = await userManager.FindByEmailAsync(resetPassword.Email);
+
+            if (user is null)
+            {
+                throw new Exception("No user with this email. You can't reset password");
+            }
+
+            if (resetPassword.NewPassword != resetPassword.NewPassword)
+            {
+                 throw new ApplicationException("Password must match confirmation password");
+            }
+
+            var result = await userManager.ResetPasswordAsync(user, resetPassword.Code, resetPassword.NewPassword);
+
+            return result.Succeeded;
         }
 
         private string generateJwtToken(IdentityUser user)
