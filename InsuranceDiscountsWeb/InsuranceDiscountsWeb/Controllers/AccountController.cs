@@ -112,50 +112,45 @@ namespace InsuranceDiscountsWeb.Controllers
                 return NotFound("Model state not valid");
             }
 
-            var user = await userManager.FindByEmailAsync(forgotPassword.Email);
-
-            if(user is null)
+            try
             {
-                logger.LogError($"No user was found with email{forgotPassword.Email}");
-                return NotFound($"No user was found with email{forgotPassword.Email}");
+                var code = await accountService.ForgotPassword(forgotPassword.Email);
+                return Ok(code);
             }
-
-            var code = await userManager.GeneratePasswordResetTokenAsync(user);
-            
-
-            await sendGridEmail.SendEmailAsync(forgotPassword.Email, "Reset Email confirmation", "Please, Reset your email + Link");
-
-            return Ok(code);
+            catch(Exception e)
+            {
+                logger.LogError(e.Message);
+                return BadRequest(e.Message);
+            }
         }
 
         [HttpPost]
-        public async Task<IActionResult> ResetPassword([FromBody]ResetPasswordViewModel resetPassword)
+        public async Task<IActionResult> ResetPassword([FromBody]ResetPasswordViewModel resetPasswordViewModel)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest("Data validation problems check proper of your email and password");
             }
 
-            var user = await userManager.FindByEmailAsync(resetPassword.Email);
+            var resetPassword = convertModel(resetPasswordViewModel);
 
-            if(user is null)
+            try
             {
-                return NotFound("No user with this email. You can't reset password");
-            }
+                var result = await accountService.ResetPassword(resetPassword);
 
-            if(resetPassword.Password != resetPassword.NewPassword)
-            {
-                return BadRequest("Password must match confirmation password");
-            }
+                if (!result)
+                {
+                    return BadRequest("System server errors found try again later");
+                }
 
-            var result = await userManager.ResetPasswordAsync(user, resetPassword.Code, resetPassword.Password);
-
-            if (result.Succeeded)
-            {
                 return Ok($"Password successfully changed to {resetPassword.NewPassword}");
+                
             }
-
-
+            catch(Exception e)
+            {
+                logger.LogError(e.Message);
+                return NotFound(e.Message);
+            }
         }
 
         private RegisterModel convertModel(RegisterViewModel registerViewModel)
@@ -174,6 +169,17 @@ namespace InsuranceDiscountsWeb.Controllers
             {
                 Email = loginViewModel.EmailAddress,
                 Password = loginViewModel.Password,
+            };
+        }
+
+        private ResetPasswordModel convertModel (ResetPasswordViewModel resetPasswordViewModel)
+        {
+            return new ResetPasswordModel
+            {
+                Email = resetPasswordViewModel.Email,
+                NewPassword = resetPasswordViewModel.NewPassword,
+                ConfirmationNewPassword = resetPasswordViewModel.ConfirmationNewPassword,
+                Code = resetPasswordViewModel.Code
             };
         }
 
