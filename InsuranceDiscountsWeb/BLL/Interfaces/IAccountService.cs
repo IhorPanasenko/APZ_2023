@@ -13,5 +13,7 @@ namespace BLL.Interfaces
         public Task<bool> Register(RegisterModel registerModel);
         public Task<string> LogIn(LoginModel loginModel);
         public Task LogOut();
+        public Task<string> ForgotPassword(string email);
+        public Task<bool> ResetPassword(ResetPasswordModel resetPassword );
     }
 }
