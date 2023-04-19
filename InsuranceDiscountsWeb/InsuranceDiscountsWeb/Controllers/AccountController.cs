@@ -170,6 +170,7 @@ namespace InsuranceDiscountsWeb.Controllers
                 UserName = registerViewModel.UserName,
                 Password = registerViewModel.Password,
                 ConfirmPassword = registerViewModel.ConfirmPassword,
+                Role = registerViewModel.Role
             };
         }
 
