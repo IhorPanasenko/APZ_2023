@@ -15,7 +15,7 @@ namespace DAL.Interfaces
         public Task<List<AppUser>> GetAllUsers();
         public Task<AppUser?> GetUserByEmail(string email);
         public Task<AppUser?> GetUserById(string userId);
-        public Task<bool> UpdateUser(string userId, AppUser user);
+        public Task<bool> UpdateUser(AppUser user);
         public Task<bool> DeleteUser(IdentityUser user);
     }
 }

@@ -87,9 +87,9 @@ namespace DAL.Services
                         var roleName = roles.FirstOrDefault(x => x.Id == oneRole.RoleId)!.Name;
                         appUser.UserRoles.Add(roleName!);
                     }
-
-                    appUsers.Add(appUser);
                 }
+
+                appUsers.Add(appUser);
             }
 
             return appUsers;
@@ -143,7 +143,7 @@ namespace DAL.Services
             }
         }
 
-        public async Task<bool> UpdateUser(string userId, AppUser user)
+        public async Task<bool> UpdateUser(AppUser user)
         {
             try
             {
@@ -154,6 +154,7 @@ namespace DAL.Services
                     throw new Exception("error in server update");
                 }
 
+                await dbContext.SaveChangesAsync();
                 return true;
             }
             catch (Exception e)
