@@ -15,15 +15,15 @@ namespace InsuranceDiscountsWeb.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> userManager;
-        private readonly SignInManager<IdentityUser> signInManager;
+        private readonly UserManager<AppUser> userManager;
+        private readonly SignInManager<AppUser> signInManager;
         private readonly ILogger<AccountController> logger;
         private readonly IAccountService accountService;
         private readonly ISendGridEmail sendGridEmail;
 
         public AccountController(
-            UserManager<IdentityUser> userManager, 
-            SignInManager<IdentityUser> signInManager, 
+            UserManager<AppUser> userManager, 
+            SignInManager<AppUser> signInManager, 
             ILogger<AccountController> logger, 
             IAccountService accountService, 
             ISendGridEmail sendGridEmail

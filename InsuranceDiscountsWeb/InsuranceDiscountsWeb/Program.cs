@@ -1,6 +1,7 @@
 using BLL.Helpers;
 using BLL.Interfaces;
 using BLL.Services;
+using Core.Models;
 using DAL;
 using DAL.Interfaces;
 using DAL.Repositories;
@@ -54,7 +55,7 @@ builder.Services.AddDbContext<InsuranceDiscountsDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("InsuranceDiscountsWeb"));
 });
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
 {
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;

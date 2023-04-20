@@ -20,16 +20,16 @@ namespace BLL.Services
 {
     public class AccountService : IAccountService
     {
-        private readonly UserManager<IdentityUser> userManager;
-        private readonly SignInManager<IdentityUser> signInManager;
+        private readonly UserManager<AppUser> userManager;
+        private readonly SignInManager<AppUser> signInManager;
         private readonly ILogger<AccountService> logger;
         private readonly IAccountRepository accountRepository;
         private readonly IConfiguration configuration;
         private readonly ISendGridEmail sendGridEmail;
 
         public AccountService(
-            UserManager<IdentityUser> userManager, 
-            SignInManager<IdentityUser> signInManager, 
+            UserManager<AppUser> userManager, 
+            SignInManager<AppUser> signInManager, 
             ILogger<AccountService> logger, 
             IAccountRepository accountRepository, 
             IConfiguration configuration,
@@ -142,7 +142,7 @@ namespace BLL.Services
             return result.Succeeded;
         }
 
-        private string generateJwtToken(IdentityUser user)
+        private string generateJwtToken(AppUser user)
         {
             var claims = new[]{
                 new Claim("Email", user.Email),

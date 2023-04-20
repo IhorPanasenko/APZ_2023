@@ -21,14 +21,14 @@ namespace DAL.Services
 {
     public class UserRepository : IUserRepository
     {
-        private readonly UserManager<IdentityUser> userManager;
+        private readonly UserManager<AppUser> userManager;
         private readonly IConfiguration configuration;
         private readonly ILogger<UserRepository> logger;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly InsuranceDiscountsDbContext dbContext;
 
         public UserRepository(
-            UserManager<IdentityUser> userManager,
+            UserManager<AppUser> userManager,
             IConfiguration configuration,
             ILogger<UserRepository> logger,
             RoleManager<IdentityRole> roleManager,
@@ -42,20 +42,13 @@ namespace DAL.Services
             this.dbContext = dbContext;
         }
 
-        public async Task<bool> DeleteUser(IdentityUser user)
+        public async Task<bool> DeleteUser(AppUser user)
         {
             try
             {
-                var result = await userManager.DeleteAsync(user);
-
-                if (result.Succeeded)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                dbContext.AppUsers.Remove(user);
+                await dbContext.SaveChangesAsync();
+                return true;
             }
             catch (Exception e)
             {
@@ -66,48 +59,44 @@ namespace DAL.Services
 
         public async Task<List<AppUser>> GetAllUsers()
         {
-            var users = await dbContext.Users.ToListAsync();
+            var users = await dbContext.AppUsers.ToListAsync();
             var userRoles = await dbContext.UserRoles.ToListAsync();
             var roles = await dbContext.Roles.ToListAsync();
-            var appUsers = new List<AppUser>();
 
             for (int i = 0; i < users.Count; i++)
             {
                 var oneUserRoles = userRoles.Where(x => x.UserId == users[i].Id).ToList();
-                var appUser = convert(users[i]);
+                //var appUser = convert(users[i]);
 
                 if (oneUserRoles.Count == 0)
                 {
-                    appUser.UserRoles.Add("None");
+                    users[i].UserRoles.Add("None");
                 }
                 else
                 {
                     foreach (var oneRole in oneUserRoles)
                     {
                         var roleName = roles.FirstOrDefault(x => x.Id == oneRole.RoleId)!.Name;
-                        appUser.UserRoles.Add(roleName!);
+                        users[i].UserRoles.Add(roleName!);
                     }
                 }
-
-                appUsers.Add(appUser);
             }
 
-            return appUsers;
+            return users;
         }
 
         public async Task<AppUser?> GetUserByEmail(string email)
         {
             try
             {
-                var identityUser = await userManager.FindByEmailAsync(email);
+                var user = await userManager.FindByEmailAsync(email);
 
-                if (identityUser is null)
+                if (user is null)
                 {
                     throw new Exception($"No user with email {email}");
                 }
 
-                var roles = await userManager.GetRolesAsync(identityUser);
-                var user = convert(identityUser);
+                var roles = await userManager.GetRolesAsync(user);
                 user.UserRoles.AddRange(roles);
 
                 return user;
@@ -123,15 +112,14 @@ namespace DAL.Services
         {
             try
             {
-                var identityUser = await userManager.FindByIdAsync(userId);
+                var user = await userManager.FindByIdAsync(userId);
 
-                if (identityUser is null)
+                if (user is null)
                 {
                     throw new Exception($"No user with Id {userId}");
                 }
 
-                var roles = await userManager.GetRolesAsync(identityUser);
-                var user = convert(identityUser);
+                var roles = await userManager.GetRolesAsync(user);
                 user.UserRoles.AddRange(roles);
 
                 return user;
@@ -147,7 +135,7 @@ namespace DAL.Services
         {
             try
             {
-                var result = await userManager.UpdateAsync(convert(user));
+                var result = await userManager.UpdateAsync(user);
 
                 if (!result.Succeeded)
                 {

@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace DAL
 {
-    public class InsuranceDiscountsDbContext : IdentityDbContext
+    public class InsuranceDiscountsDbContext: IdentityDbContext<IdentityUser>
     {
         public DbSet<AppUser> AppUsers { get; set; }
 
-        public InsuranceDiscountsDbContext(DbContextOptions options) : base(options)
+        public InsuranceDiscountsDbContext(DbContextOptions<InsuranceDiscountsDbContext> options) : base(options)
         {
             
         }

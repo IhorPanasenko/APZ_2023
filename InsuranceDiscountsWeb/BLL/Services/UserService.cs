@@ -24,13 +24,13 @@ namespace BLL.Services
         private readonly ILogger<UserService> logger;
         private readonly IConfiguration configuration;
         private readonly IUserRepository userRepository;
-        private readonly UserManager<IdentityUser> userManager;
+        private readonly UserManager<AppUser> userManager;
 
         public UserService(
             ILogger<UserService> logger,
             IConfiguration configuration,
             IUserRepository userRepository,
-            UserManager<IdentityUser> userManager
+            UserManager<AppUser> userManager
             )
         {
             this.logger = logger;

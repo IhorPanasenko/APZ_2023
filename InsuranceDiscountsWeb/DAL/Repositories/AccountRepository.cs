@@ -12,15 +12,15 @@ namespace DAL.Repositories
 {
     public class AccountRepository : IAccountRepository
     {
-        private readonly UserManager<IdentityUser> userManager;
-        private readonly SignInManager<IdentityUser> signInManager;
+        private readonly UserManager<AppUser> userManager;
+        private readonly SignInManager<AppUser> signInManager;
         private readonly ILogger<AccountRepository> logger;
         private readonly RoleManager<IdentityRole> roleManager;
 
         public AccountRepository(
             ILogger<AccountRepository> logger, 
-            SignInManager<IdentityUser> signInManager, 
-            UserManager<IdentityUser> userManager,
+            SignInManager<AppUser> signInManager, 
+            UserManager<AppUser> userManager,
             RoleManager<IdentityRole> roleManager
             )
         {
@@ -30,15 +30,10 @@ namespace DAL.Repositories
             this.roleManager = roleManager;
         }
 
-        public async Task<string> LogIn(LoginModel loginModel)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<bool> Register(RegisterModel registerModel)
         {
 
-            var identityUser = new IdentityUser
+            var identityUser = new AppUser
             {
                 Email = registerModel.Email,
                 UserName = registerModel.UserName
