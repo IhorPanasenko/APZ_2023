@@ -105,11 +105,11 @@ namespace BLL.Services
             }
         }
 
-        public async Task<bool> UpdateUser(string userId, AppUser user)
+        public async Task<bool> UpdateUser(AppUser user)
         {
             try
             {
-              return await userRepository.UpdateUser(userId, user);    
+              return await userRepository.UpdateUser(user);    
             }
             catch(Exception e)
             {
