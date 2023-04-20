@@ -12,10 +12,14 @@ namespace DAL
 {
     public class InsuranceDiscountsDbContext : IdentityDbContext
     {
-        public InsuranceDiscountsDbContext(DbContextOptions<InsuranceDiscountsDbContext> options) : base (options)
+        public DbSet<AppUser> AppUsers { get; set; }
+
+        public InsuranceDiscountsDbContext(DbContextOptions options) : base(options)
         {
             
         }
+        
+       
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
