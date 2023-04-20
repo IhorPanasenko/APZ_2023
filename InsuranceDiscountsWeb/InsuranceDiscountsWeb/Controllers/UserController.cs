@@ -1,8 +1,10 @@
 ﻿using BLL.Interfaces;
 using Core.Models;
+using InsuranceDiscountsWeb.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Linq.Expressions;
 
 namespace InsuranceDiscountsWeb.Controllers
 {
@@ -79,17 +81,52 @@ namespace InsuranceDiscountsWeb.Controllers
         }
 
         [HttpPost("Update")]
-        public async Task<IActionResult> UpdateUser(string UserId, AppUser appUser)
+        public async Task<IActionResult> UpdateUser(string userId, UserUpdateViewModel userUpdateViewModel)
         {
             try
             {
-                return Ok(await userService.UpdateUser(UserId, appUser));
+                var appUser = convert(userId, userUpdateViewModel);
+
+                if(appUser is null)
+                {
+                    return BadRequest($"Can't get user with Id {userId} from Database");
+                }
+
+                return Ok(await userService.UpdateUser(appUser));
             }
             catch(Exception e)
             {
                 logger.LogError(e.Message);
                 return BadRequest(e.Message); 
 
+            }
+        }
+
+        private AppUser? convert(string userId, UserUpdateViewModel userUpdateViewModel)
+        {
+            try
+            {
+                var user = userService.GetUserById(userId);
+
+                if (user == null)
+                {
+                    throw new Exception($"Can't get user with Id {userId} from database");
+                }
+
+                return new AppUser
+                {
+                    Id = userId,
+                    FirstName = userUpdateViewModel.FirstName,
+                    LastName = userUpdateViewModel.LastName,
+                    Email = userUpdateViewModel.Email,
+                    PhoneNumber = userUpdateViewModel.PhoneNumber,
+                    UserName = userUpdateViewModel.UserName
+                };
+            }
+            catch(Exception e)
+            {
+                logger.LogError(e.Message);
+                return null;
             }
         }
     }
