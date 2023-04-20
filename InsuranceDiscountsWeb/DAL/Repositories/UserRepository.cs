@@ -19,23 +19,27 @@ using System.Threading.Tasks;
 
 namespace DAL.Services
 {
-    public class UserRepository: IUserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly UserManager<IdentityUser> userManager;
         private readonly IConfiguration configuration;
         private readonly ILogger<UserRepository> logger;
         private readonly RoleManager<IdentityRole> roleManager;
+        private readonly InsuranceDiscountsDbContext dbContext;
+
         public UserRepository(
-            UserManager<IdentityUser> userManager, 
-            IConfiguration configuration, 
+            UserManager<IdentityUser> userManager,
+            IConfiguration configuration,
             ILogger<UserRepository> logger,
-            RoleManager<IdentityRole> roleManager
+            RoleManager<IdentityRole> roleManager,
+            InsuranceDiscountsDbContext dbContext
             )
         {
             this.userManager = userManager;
             this.configuration = configuration;
-            this.logger = logger; 
+            this.logger = logger;
             this.roleManager = roleManager;
+            this.dbContext = dbContext;
         }
 
         public async Task<bool> DeleteUser(IdentityUser user)
@@ -53,7 +57,7 @@ namespace DAL.Services
                     return false;
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 logger.LogError(e.Message);
                 return false;
@@ -62,24 +66,29 @@ namespace DAL.Services
 
         public async Task<List<AppUser>> GetAllUsers()
         {
-            List<AppUser> appUsers = new List<AppUser>();
-            var roles = await roleManager.Roles.ToListAsync();
+            var users = await dbContext.Users.ToListAsync();
+            var userRoles = await dbContext.UserRoles.ToListAsync();
+            var roles = await dbContext.Roles.ToListAsync();
+            var appUsers = new List<AppUser>();
 
-            for (int i = 0; i < roles.Count; ++i)
+            for (int i = 0; i < users.Count; i++)
             {
-                var usersInRole = await userManager.GetUsersInRoleAsync(roles[i].Name);
-                for(int j =0; j < usersInRole.Count; j++)
+                var oneUserRoles = userRoles.Where(x => x.UserId == users[i].Id).ToList();
+                var appUser = convert(users[i]);
+
+                if (oneUserRoles.Count == 0)
                 {
-                    var user = convert(usersInRole[j]);
-                    if (!appUsers.Contains(user))
+                    appUser.UserRoles.Add("None");
+                }
+                else
+                {
+                    foreach (var oneRole in oneUserRoles)
                     {
-                        user.UserRoles.Add(roles[i].Name);
-                        appUsers.Add(user);
+                        var roleName = roles.FirstOrDefault(x => x.Id == oneRole.RoleId)!.Name;
+                        appUser.UserRoles.Add(roleName!);
                     }
-                    else
-                    {
-                        appUsers[appUsers.IndexOf(user)].UserRoles.Add(roles[i].Name);
-                    }
+
+                    appUsers.Add(appUser);
                 }
             }
 
@@ -103,7 +112,7 @@ namespace DAL.Services
 
                 return user;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 logger.LogError(e.Message);
                 return null;
@@ -138,7 +147,7 @@ namespace DAL.Services
         {
             try
             {
-               var result = await userManager.UpdateAsync(convert(user));
+                var result = await userManager.UpdateAsync(convert(user));
 
                 if (!result.Succeeded)
                 {
@@ -147,7 +156,7 @@ namespace DAL.Services
 
                 return true;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 logger.LogError(e.Message);
                 return false;
