@@ -1,6 +1,7 @@
 ﻿using BLL.Interfaces;
 using Core.Models;
 using DAL.Interfaces;
+using DAL.Services;
 using InsuranceDiscountsWeb.Managers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
@@ -20,113 +21,101 @@ namespace BLL.Services
     public class UserService : IUserService
     {
         //private IUserRepository userRepository;
-        private ILogger<UserService> logger;
-        private UserManager<IdentityUser> userManager;
-        private IConfiguration configuration;
+        private readonly ILogger<UserService> logger;
+        private readonly IConfiguration configuration;
+        private readonly IUserRepository userRepository;
+        private readonly UserManager<AppUser> userManager;
 
-        public UserService(IUserRepository userRepository, ILogger<UserService> logger)
+        public UserService(
+            ILogger<UserService> logger,
+            IConfiguration configuration,
+            IUserRepository userRepository,
+            UserManager<AppUser> userManager
+            )
         {
-            
             this.logger = logger;
+            this.configuration = configuration;
+            this.userRepository = userRepository;
+            this.userManager = userManager;
         }
 
-        public async Task<UserManagerResponse> LoginUserAsync(LoginModel loginModel)
+        public async Task<bool> DeleteUser(string email)
         {
-            var user = await userManager.FindByEmailAsync(loginModel.Email);
-
-            if (user is null)
+            try
             {
-                return new UserManagerResponse
+                var user = await userManager.FindByEmailAsync(email);
+
+                if (user is null)
                 {
-                    Message = "No user with this email address",
-                    IsSuccess = false,
-                };
+                    throw new Exception($"No user with email {email}");
+                }
+
+                var result = await userRepository.DeleteUser(user);
+                return result;
+
             }
-
-            var result = await userManager.CheckPasswordAsync(user, loginModel.Password);
-
-            if (!result)
+            catch (Exception e)
             {
-                return new UserManagerResponse
-                {
-                    Message = "Invalid password",
-                    IsSuccess = false,
-                };
+                logger.LogError(e.Message);
+                return false;
             }
-
-            var claims = new[]
-            {
-                new Claim("Email", loginModel.Email),
-                new Claim("UserId", user.Id),
-            };
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["AuthSettings:Key"]));
-
-            var token = new JwtSecurityToken(
-                issuer: configuration["AuthSettings:Issuer"],
-                audience: configuration["AuthSettings:audience"],
-                claims: claims,
-                expires: DateTime.Now.AddDays(30),
-                signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature)
-                );
-
-            string tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-
-            return new UserManagerResponse
-            {
-                Message = tokenString,
-                IsSuccess = true,
-                ExpireDate = token.ValidTo
-            };
-
         }
 
-        public async Task<UserManagerResponse> RegisterUserAsync(RegisterModel registerModel)
+        public async Task<List<AppUser>> GetAllUsers()
         {
-            if (registerModel == null)
+            var users = new List<AppUser>();
+
+            try
             {
-                throw new ArgumentNullException("RegisterModel is null");
+                users = await userRepository.GetAllUsers();
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.Message);
             }
 
-            if (registerModel.Password != registerModel.ConfirmPassword)
+            return users;
+        }
+
+        public async Task<AppUser?> GetUserByEmail(string email)
+        {
+            try
             {
-                return new UserManagerResponse
-                {
-                    Message = "Confirm password doesn't match the password",
-                    IsSuccess = false
-                };
+                var user = await userRepository.GetUserByEmail(email);
+                return user;
             }
-
-            var identityUser = new IdentityUser
+            catch (Exception e)
             {
-                Email = registerModel.Email,
-                UserName = registerModel.Email
-            };
-
-            var result = await userManager.CreateAsync(identityUser);
-
-            if (!result.Succeeded)
-            {
-                return new UserManagerResponse
-                {
-                    Message = "User didn't created",
-                    IsSuccess = false,
-                    Errors = result.Errors.Select(e => e.Description)
-                };
+                logger.LogError(e.Message);
+                return null;
             }
+        }
 
-            //var confirmEmailToken = await userManager.GenerateEmailConfirmationTokenAsync(identityUser);
-            //var encodedMailToken = Encoding.UTF8.GetBytes(confirmEmailToken);
-            //var validEmailToken = WebEncoders.Base64UrlEncode(encodedMailToken);
-            //string url = $"{configuration["AppUrl"]}/api/auth/confirmemail&userid={identityUser.Id}&token{validEmailToken}";
-
-            return new UserManagerResponse
+        public async Task<AppUser?> GetUserById(string userId)
+        {
+            try
             {
-                Message = "User created Succefully",
-                IsSuccess = true
-            };
+                var user = await userRepository.GetUserById(userId);
+                return user;
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.Message);
+                return null;
+            }
+        }
 
-
+        public async Task<bool> UpdateUser(AppUser user)
+        {
+            try
+            {
+              return await userRepository.UpdateUser(user);    
+            }
+            catch(Exception e)
+            {
+                logger.LogError(e.Message);
+                return false;
+            }
         }
     }
 }

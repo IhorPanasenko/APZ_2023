@@ -10,12 +10,16 @@ using System.Threading.Tasks;
 
 namespace DAL
 {
-    public class InsuranceDiscountsDbContext : IdentityDbContext
+    public class InsuranceDiscountsDbContext: IdentityDbContext<IdentityUser>
     {
-        public InsuranceDiscountsDbContext(DbContextOptions<InsuranceDiscountsDbContext> options) : base (options)
+        public DbSet<AppUser> AppUsers { get; set; }
+
+        public InsuranceDiscountsDbContext(DbContextOptions<InsuranceDiscountsDbContext> options) : base(options)
         {
             
         }
+        
+       
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

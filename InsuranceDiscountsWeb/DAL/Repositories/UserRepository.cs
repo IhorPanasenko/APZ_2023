@@ -4,8 +4,10 @@ using DAL.Repositories;
 using InsuranceDiscountsWeb.Managers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -17,31 +19,159 @@ using System.Threading.Tasks;
 
 namespace DAL.Services
 {
-    public class UserRepository: IUserRepository
+    public class UserRepository : IUserRepository
     {
-        private UserManager<IdentityUser> userManager;
-        private IConfiguration configuration;
-        private IMailRepository mailRepository;
-        public UserRepository(UserManager<IdentityUser> userManager, IConfiguration configuration, IMailRepository mailRepository)
+        private readonly UserManager<AppUser> userManager;
+        private readonly IConfiguration configuration;
+        private readonly ILogger<UserRepository> logger;
+        private readonly RoleManager<IdentityRole> roleManager;
+        private readonly InsuranceDiscountsDbContext dbContext;
+
+        public UserRepository(
+            UserManager<AppUser> userManager,
+            IConfiguration configuration,
+            ILogger<UserRepository> logger,
+            RoleManager<IdentityRole> roleManager,
+            InsuranceDiscountsDbContext dbContext
+            )
         {
             this.userManager = userManager;
             this.configuration = configuration;
-            this.mailRepository = mailRepository;
+            this.logger = logger;
+            this.roleManager = roleManager;
+            this.dbContext = dbContext;
         }
 
-        public async Task<UserManagerResponse> ConfirmEmailAsync(string userId, string token)
+        public async Task<bool> DeleteUser(AppUser user)
         {
-            return null;
+            try
+            {
+                dbContext.AppUsers.Remove(user);
+                await dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.Message);
+                return false;
+            }
         }
 
-        public Task<UserManagerResponse> LoginUserAsync(LoginModel loginModel)
+        public async Task<List<AppUser>> GetAllUsers()
         {
-            throw new NotImplementedException();
+            var users = await dbContext.AppUsers.ToListAsync();
+            var userRoles = await dbContext.UserRoles.ToListAsync();
+            var roles = await dbContext.Roles.ToListAsync();
+
+            for (int i = 0; i < users.Count; i++)
+            {
+                var oneUserRoles = userRoles.Where(x => x.UserId == users[i].Id).ToList();
+                //var appUser = convert(users[i]);
+
+                if (oneUserRoles.Count == 0)
+                {
+                    users[i].UserRoles.Add("None");
+                }
+                else
+                {
+                    foreach (var oneRole in oneUserRoles)
+                    {
+                        var roleName = roles.FirstOrDefault(x => x.Id == oneRole.RoleId)!.Name;
+                        users[i].UserRoles.Add(roleName!);
+                    }
+                }
+            }
+
+            return users;
         }
 
-        public Task<UserManagerResponse> RegisterUserAsync(RegisterModel registerModel)
+        public async Task<AppUser?> GetUserByEmail(string email)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var user = await userManager.FindByEmailAsync(email);
+
+                if (user is null)
+                {
+                    throw new Exception($"No user with email {email}");
+                }
+
+                var roles = await userManager.GetRolesAsync(user);
+                user.UserRoles.AddRange(roles);
+
+                return user;
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.Message);
+                return null;
+            }
+        }
+
+        public async Task<AppUser?> GetUserById(string userId)
+        {
+            try
+            {
+                var user = await userManager.FindByIdAsync(userId);
+
+                if (user is null)
+                {
+                    throw new Exception($"No user with Id {userId}");
+                }
+
+                var roles = await userManager.GetRolesAsync(user);
+                user.UserRoles.AddRange(roles);
+
+                return user;
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.Message);
+                return null;
+            }
+        }
+
+        public async Task<bool> UpdateUser(AppUser user)
+        {
+            try
+            {
+                var result = await userManager.UpdateAsync(user);
+
+                if (!result.Succeeded)
+                {
+                    throw new Exception("error in server update");
+                }
+
+                await dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.Message);
+                return false;
+            }
+        }
+
+        private AppUser convert(IdentityUser identityUser)
+        {
+            return new AppUser
+            {
+                UserName = identityUser.UserName,
+                Email = identityUser.Email,
+                Id = identityUser.Id,
+                PhoneNumber = identityUser.PhoneNumber,
+            };
+        }
+
+        private IdentityUser convert(AppUser appUser)
+        {
+            return new IdentityUser
+            {
+                UserName = appUser.UserName,
+                Email = appUser.Email,
+                Id = appUser.Id,
+                PhoneNumber = appUser.PhoneNumber,
+            };
         }
     }
 }
