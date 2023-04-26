@@ -124,7 +124,7 @@ namespace InsuranceDiscountsWeb.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("ResetPassword")]
         public async Task<IActionResult> ResetPassword([FromBody]ResetPasswordViewModel resetPasswordViewModel)
         {
             if (!ModelState.IsValid)
