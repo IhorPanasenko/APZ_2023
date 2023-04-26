@@ -10,7 +10,7 @@ namespace Core.Models
     public class Company
     {
         [Key]
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
 
         [Required]
         public string CompanyName { get; set; } = String.Empty;

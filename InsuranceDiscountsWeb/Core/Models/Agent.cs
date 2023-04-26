@@ -11,7 +11,7 @@ namespace Core.Models
     public class Agent
     {
         [Key]
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();  
 
         [Required]
         public string FirstName { get; set; } = String.Empty;
