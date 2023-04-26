@@ -34,6 +34,6 @@ namespace Core.Models
         [ForeignKey("UserId")]
         public Guid UserId { get; set; }
 
-        public AppUser AppUser { get; set; }
+        public AppUser? AppUser { get; set; }
     }
 }
