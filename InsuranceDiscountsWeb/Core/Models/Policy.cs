@@ -25,6 +25,9 @@ namespace Core.Models
         [Required]
         public double Price { get; set; }
 
+        [Required]
+        public int TimePeriod { get; set; } = 12;
+
         [ForeignKey("CompanyId")]
         public Guid CompanyId { get; set; }
 
