@@ -96,9 +96,19 @@ namespace DAL.Repositories
             }
         }
 
-        public Task<bool> Update(Category category)
+        public async Task<bool> Update(Category category)
         {
-            throw new NotImplementedException();
+            try
+            {
+                dbContext.Categories.Update(category);
+                await dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch(Exception e)
+            {
+                logger.LogError(e.Message);
+                return false;
+            }
         }
     }
 }
