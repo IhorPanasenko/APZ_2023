@@ -9,7 +9,7 @@ namespace DAL.Interfaces
 {
     public interface ICompanyRepository
     {
-        public Task<Company?> GetById(int id);
+        public Task<Company?> GetById(Guid id);
 
         public Task<List<Company>> GetAll();
 
