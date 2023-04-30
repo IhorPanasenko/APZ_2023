@@ -24,29 +24,102 @@ namespace BLL.Services
             this.companyRepository = companyRepository;
             this.logger = logger;
         }
-        public Task<Company?> Create(Company company)
+        public async Task<Company?> Create(Company company)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var res =await companyRepository.Create(company);
+
+                if(res is null)
+                {
+                    throw new Exception("No category was created see Console Logging");
+                }
+
+                return res;
+            }
+            catch(Exception e)
+            {
+                logger.LogError(e.Message);
+                return null;
+            }
         }
 
-        public Task<bool> Delete(Guid id)
+        public async Task<bool> Delete(Guid id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var result = await companyRepository.Delete(id);
+                return result;
+            }
+            catch(Exception e)
+            {
+                logger.LogError(e.Message);
+                return false;
+            }
         }
 
-        public Task<List<Company>> GetAll()
+        public async Task<List<Company>> GetAll()
         {
-            throw new NotImplementedException();
+            List<Company> companies = new List<Company>();
+
+            try
+            {
+                companies = await companyRepository.GetAll();
+
+            }
+            catch(Exception e)
+            {
+                logger.LogError(e.Message);
+            }
+
+            return companies;
         }
 
-        public Task<Company?> GetById(Guid id)
+        public async Task<Company?> GetById(Guid id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var company = await companyRepository.GetById(id);
+                return company;
+            }
+            catch(Exception e)
+            {
+                logger.LogError(e.Message);
+                return null;
+            }
         }
 
-        public Task<bool> Update(UpdateCompanyModel company)
+        public async Task<bool> Update(UpdateCompanyModel updateCompany)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var oldCompany = await companyRepository.GetById(updateCompany.Id);
+
+                if(oldCompany is null)
+                {
+                    throw new ArgumentException($"No company with id {updateCompany.Id}");
+                }
+
+                update(oldCompany, updateCompany);
+                var res = await companyRepository.Update(oldCompany);
+                return res;
+            }
+            catch(Exception e)
+            {
+                logger.LogError(e.Message);
+                return false;
+            }
+        }
+
+        private void update(Company oldCompany, UpdateCompanyModel updateCompany) 
+        {
+            oldCompany.Id = updateCompany.Id;
+            oldCompany.CompanyName = String.IsNullOrEmpty(updateCompany.CompanyName) ? oldCompany.CompanyName: updateCompany.CompanyName;
+            oldCompany.Description = String.IsNullOrEmpty(updateCompany.Description) ? oldCompany.Description : updateCompany.Description;
+            oldCompany.Address = String.IsNullOrEmpty(updateCompany.Address) ? oldCompany.Address : updateCompany.Address;
+            oldCompany.PhoneNumber = String.IsNullOrEmpty (updateCompany.PhoneNumber) ? oldCompany.PhoneNumber : updateCompany.PhoneNumber;
+            oldCompany.EmailAddress = String.IsNullOrEmpty(updateCompany.EmailAddress) ? oldCompany.EmailAddress : updateCompany.EmailAddress;
+            oldCompany.WebsiteAddress = String.IsNullOrEmpty(updateCompany.WebsiteAddress) ? oldCompany.WebsiteAddress : updateCompany.WebsiteAddress; 
         }
     }
 }
