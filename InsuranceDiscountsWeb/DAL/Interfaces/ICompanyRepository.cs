@@ -13,7 +13,7 @@ namespace DAL.Interfaces
 
         public Task<List<Company>> GetAll();
 
-        public Task<Company> Create(Company company);
+        public Task<Company?> Create(Company company);
 
         public Task<bool> Delete(Guid id);
 
