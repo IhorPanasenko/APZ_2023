@@ -16,7 +16,6 @@ namespace Core.Models.UpdateModels
 
         public string? Description { get; set; }
 
-        [Required]
         public string? Address { get; set; } 
 
         [Phone]
