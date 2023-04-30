@@ -65,7 +65,6 @@ namespace BLL.Services
             try
             {
                 companies = await companyRepository.GetAll();
-
             }
             catch(Exception e)
             {
