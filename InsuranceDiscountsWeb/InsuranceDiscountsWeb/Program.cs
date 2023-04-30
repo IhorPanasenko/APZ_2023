@@ -91,13 +91,16 @@ builder.Services.AddAuthentication(auth =>
         options.ClientSecret = builder.Configuration["web:client_secret"];
     });
 
+builder.Services.AddTransient<ISendGridEmail, SendGridEmail>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddTransient<IMailRepository, MailRepositoriy>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
-builder.Services.AddTransient<ISendGridEmail, SendGridEmail>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration.GetSection("SendGrid"));
 
