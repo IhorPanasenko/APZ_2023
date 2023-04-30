@@ -128,7 +128,7 @@ namespace InsuranceDiscountsWeb.Controllers
                     return NotFound($"Cannot Update category with parameters\nid: {category.Id}\nname: {category.CategoryName}");
                 }
 
-                return Ok(res);
+                return Ok("Category Succeffully Updated");
             }
             catch (Exception e)
             {
