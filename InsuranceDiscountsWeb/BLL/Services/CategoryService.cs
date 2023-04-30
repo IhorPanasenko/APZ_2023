@@ -3,6 +3,7 @@ using Core.Models;
 using Core.Models.UpdateModels;
 using DAL.Interfaces;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -108,7 +109,7 @@ namespace BLL.Services
             return new Category
             {
                 Id = oldCategory.Id,
-                CategoryName = category.CategoryName ?? oldCategory.CategoryName
+                CategoryName = String.IsNullOrEmpty(category.CategoryName) ? oldCategory.CategoryName : category.CategoryName
             };
         }
     }
