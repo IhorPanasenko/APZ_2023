@@ -40,17 +40,16 @@ namespace DAL.Repositories
         {
             try
             {
-                var user = await dbContext.Users.FindAsync(id);
+                var category = await dbContext.Categories.FindAsync(id);
 
-                if(user == null)
+                if(category is null)
                 {
                     throw new Exception($"No user with Id {id}");
                 }
 
-                dbContext.Remove(user);
+                dbContext.Categories.Remove(category);
                 await dbContext.SaveChangesAsync();
                 return true;
-
             }
             catch (Exception e)
             {
