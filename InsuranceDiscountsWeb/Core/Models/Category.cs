@@ -15,6 +15,7 @@ namespace Core.Models
 
         [Required]
         [Index(IsUnique = true)]
+        [MinLength(3)]
         public string CategoryName { get; set; } = String.Empty;
     }
 }
