@@ -92,9 +92,9 @@ namespace BLL.Services
                     throw new Exception($"No Category with id: {category.Id} was found in database");
                 }
 
-                var updatedCategory = update(oldCategory, category);
+                update(oldCategory, category);
 
-                var res = await categoryRepository.Update(updatedCategory);
+                var res = await categoryRepository.Update(oldCategory);
                 return res;
             }
             catch (Exception e)
@@ -104,13 +104,9 @@ namespace BLL.Services
             }
         }
 
-        private Category update(Category oldCategory, UpdateCategoryModel category)
+        private void update(Category oldCategory, UpdateCategoryModel category)
         {
-            return new Category
-            {
-                Id = oldCategory.Id,
-                CategoryName = String.IsNullOrEmpty(category.CategoryName) ? oldCategory.CategoryName : category.CategoryName
-            };
+            oldCategory.CategoryName  = String.IsNullOrEmpty(category.CategoryName) ? oldCategory.CategoryName : category.CategoryName;
         }
     }
 }
