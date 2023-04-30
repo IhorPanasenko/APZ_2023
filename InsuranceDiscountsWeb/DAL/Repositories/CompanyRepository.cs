@@ -1,5 +1,6 @@
 ﻿using Core.Models;
 using DAL.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -30,31 +31,83 @@ namespace DAL.Repositories
                 await dbContext.SaveChangesAsync();
                 return company;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 logger.LogError(e.Message);
                 return null;
             }
         }
 
-        public Task<bool> Delete(Guid id)
+        public async Task<bool> Delete(Guid id)
         {
-            
+            try
+            {
+                var company = await dbContext.Companies.FindAsync(id);
+
+                if (company is null)
+                {
+                    throw new Exception($"Can't find company with id {id}");
+                }
+
+                dbContext.Companies.Remove(company);
+                await dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.Message);
+                return false;
+            }
         }
 
-        public Task<List<Company>> GetAll()
+        public async Task<List<Company>> GetAll()
         {
-            throw new NotImplementedException();
+            List<Company> companies = new List<Company>();
+            try
+            {
+                companies = await dbContext.Companies.ToListAsync();
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.Message);
+            }
+
+            return companies;
         }
 
-        public Task<Company?> GetById(int id)
+        public async Task<Company?> GetById(Guid id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var company = await dbContext.Companies.FindAsync(id);
+
+                if (company is null)
+                {
+                    throw new ArgumentException($"Can't find company with id: {id}");
+                }
+
+                return company;
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.Message);
+                return null;
+            }
         }
 
-        public Task<bool> Update(Company company)
+        public async Task<bool> Update(Company company)
         {
-            throw new NotImplementedException();
+            try
+            {
+                dbContext.Update(company);
+                await dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.Message);
+                return false;
+            }
         }
     }
 }
