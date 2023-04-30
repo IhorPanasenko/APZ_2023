@@ -1,4 +1,5 @@
 ﻿using Core.Models;
+using Core.Models.UpdateModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace BLL.Interfaces
     {
         public Task<bool> Create(Category category);
 
-        public Task<bool> Update(Category category);
+        public Task<bool> Update(UpdateCategoryModel category);
 
         public Task<List<Category>> GetAll();
 

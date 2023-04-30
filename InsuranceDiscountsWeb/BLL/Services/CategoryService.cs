@@ -1,5 +1,6 @@
 ﻿using BLL.Interfaces;
 using Core.Models;
+using Core.Models.UpdateModels;
 using DAL.Interfaces;
 using Microsoft.Extensions.Logging;
 using System;
@@ -79,11 +80,20 @@ namespace BLL.Services
             }
         }
 
-        public async Task<bool> Update(Category category)
+        public async Task<bool> Update(UpdateCategoryModel category)
         {
             try
             {
-                var res = await categoryRepository.Update(category);
+                var oldCategory = await categoryRepository.GetById(category.Id);
+
+                if(oldCategory is null)
+                {
+                    throw new Exception($"No Category with id: {category.Id} was found in database");
+                }
+
+                var updatedCategory = update(oldCategory, category);
+
+                var res = await categoryRepository.Update(updatedCategory);
                 return res;
             }
             catch (Exception e)
@@ -91,6 +101,15 @@ namespace BLL.Services
                 logger.LogError(e.Message);
                 return false;
             }
+        }
+
+        private Category update(Category oldCategory, UpdateCategoryModel category)
+        {
+            return new Category
+            {
+                Id = oldCategory.Id,
+                CategoryName = category.CategoryName ?? oldCategory.CategoryName
+            };
         }
     }
 }
