@@ -97,7 +97,7 @@ builder.Services.AddTransient<IMailRepository, MailRepositoriy>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
-builder.Services.AddScoped<IAgentService, AgentService>();
+builder.Services.AddScoped<IAgentRepository, AgentRepository>();
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
