@@ -35,6 +35,6 @@ namespace Core.Models
         public Guid CompanyId { get; set; }
 
         [Required]
-        public Company? company { get; set; }
+        public Company? Company { get; set; }
     }
 }
