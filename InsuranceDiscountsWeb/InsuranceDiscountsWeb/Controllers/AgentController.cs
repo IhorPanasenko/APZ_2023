@@ -1,6 +1,8 @@
 ﻿using BLL.Interfaces;
 using Core.Models;
+using Core.Models.UpdateModels;
 using InsuranceDiscountsWeb.ViewModels;
+using InsuranceDiscountsWeb.ViewModels.UpdateViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,7 +23,7 @@ namespace InsuranceDiscountsWeb.Controllers
             this.logger = logger;
             this.agentService = agentService;
         }
-        
+
         [HttpGet("GetById")]
         public async Task<IActionResult> GetById(Guid id)
         {
@@ -29,14 +31,15 @@ namespace InsuranceDiscountsWeb.Controllers
             {
                 var agent = await agentService.GetById(id);
 
-                if(agent is null)
+                if (agent is null)
                 {
-                    return NotFound($"No agent with id {id} was found");  
+                    return NotFound($"No agent with id {id} was found");
                 }
 
-                return Ok(agent);
+                var agentView = convert(agent);
+                return Ok(agentView);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 logger.LogError(e.Message);
                 return BadRequest(e.Message);
@@ -49,9 +52,10 @@ namespace InsuranceDiscountsWeb.Controllers
             try
             {
                 var agents = await agentService.GetAll();
-                return Ok(agents);
+                var agentViews = convert(agents);
+                return Ok(agentViews);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 logger.LogError(e.Message);
                 return BadRequest(e.Message);
@@ -69,8 +73,57 @@ namespace InsuranceDiscountsWeb.Controllers
             try
             {
                 var agent = convert(agentViewModel);
-                var result = agentService.Create(agent);
+                var result = await agentService.Create(agent);
 
+                if (!result)
+                {
+                    return BadRequest("Can't create this agent");
+                }
+
+                return Ok("Agent created Successfully");
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.Message);
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            try
+            {
+                var result = await agentService.Delete(id);
+
+                if (!result)
+                {
+                    return BadRequest($"Can't delete agent with id {id}");
+                }
+
+                return Ok($"Agent with id {id} succesfully deleted");
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.Message);
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPut("Update")]
+        public async Task<IActionResult> Update(UpdateAgentViewModel updateAgentViewModel)
+        {
+            try
+            {
+                var updateModel = convert(updateAgentViewModel);
+                var res = await agentService.Update(updateModel);
+
+                if(res is null)
+                {
+                    return BadRequest($"Can't update agent with Id {updateAgentViewModel.Id}");
+                }
+
+                return Ok(res);
             }
             catch(Exception e)
             {
@@ -90,8 +143,47 @@ namespace InsuranceDiscountsWeb.Controllers
                 EmailAddress = agentViewModel.EmailAddress,
                 Raiting = agentViewModel.Raiting,
                 CompanyId = agentViewModel.CompanyId
+            };
+        }
 
+        private object convert(List<Agent> agents)
+        {
+            List<AgentViewModel> agentViews = new List<AgentViewModel>();
+
+            foreach (var agent in agents)
+            {
+                agentViews.Add(convert(agent));
             }
+
+            return agentViews;
+        }
+
+        private AgentViewModel convert(Agent agent)
+        {
+            return new AgentViewModel
+            {
+                Id = agent.Id,
+                FirstName = agent.FirstName,
+                SecondName = agent.SecondName,
+                PhoneNumber = agent.PhoneNumber,
+                EmailAddress = agent.EmailAddress,
+                Raiting = agent.Raiting,
+                CompanyId = agent.CompanyId
+            };
+        }
+
+        private UpdateAgentModel convert(UpdateAgentViewModel agentViewModel)
+        {
+            return new UpdateAgentModel
+            {
+                Id = agentViewModel.Id,
+                FirstName = agentViewModel.FirstName,
+                SecondName = agentViewModel.SecondName,
+                PhoneNumber = agentViewModel.PhoneNumber,
+                EmailAddress = agentViewModel.EmailAddress,
+                Raiting = agentViewModel.Raiting,
+                CompanyId = agentViewModel.CompanyId
+            };
         }
     }
 }
