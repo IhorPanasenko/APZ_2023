@@ -14,7 +14,7 @@ namespace BLL.Interfaces
 
         public Task<List<Agent>> GetAll();
 
-        public Task<Agent?> Create(Agent agent);
+        public Task<bool> Create(Agent agent);
 
         public Task<bool> Delete(Guid id);
 
