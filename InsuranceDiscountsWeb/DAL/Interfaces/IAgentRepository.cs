@@ -10,14 +10,14 @@ namespace DAL.Interfaces
 {
     public interface IAgentRepository
     {
-        public Task<Agent> GetById(Guid id);
+        public Task<Agent?> GetById(Guid id);
         
         public Task<List<Agent>> GetAll();
 
-        public Task<Agent> Create(Agent agent);
+        public Task<Agent?> Create(Agent agent);
 
         public Task<bool> Delete(Guid id);
 
-        public Task<Agent> Update(UpdateAgentModel agent);
+        public Task<Agent?> Update(UpdateAgentModel agent);
     }
 }
