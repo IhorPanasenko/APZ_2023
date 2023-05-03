@@ -24,7 +24,7 @@ namespace Core.Models.UpdateModels
 
         public double Cards { get; set; }
 
-        public Guid UserId { get; set; }
+        public Guid? UserId { get; set; }
 
         public AppUser? AppUser { get; set; }
     }
