@@ -15,14 +15,17 @@ namespace DAL.Repositories
     {
         private readonly ILogger<AgentRepository> logger;
         private readonly InsuranceDiscountsDbContext dbContext;
+        private readonly ICompanyRepository companyRepository;
 
         public AgentRepository(
             ILogger<AgentRepository> logger,
-            InsuranceDiscountsDbContext dbContext
+            InsuranceDiscountsDbContext dbContext,
+            ICompanyRepository companyRepository
             )
         {
             this.logger = logger;
             this.dbContext = dbContext;
+            this.companyRepository = companyRepository;
         }
 
         public async Task<Agent?> Create(Agent agent)
@@ -72,7 +75,17 @@ namespace DAL.Repositories
 
             try
             {
-                 agents =await dbContext.Agents.ToListAsync();
+                agents =await dbContext.Agents.ToListAsync();
+
+                foreach(var agent in agents)
+                {
+                    var company = await dbContext.Companies.FindAsync(agent.CompanyId);
+
+                    if (company is not null)
+                    {
+                        agent.Company = company;
+                    }
+                }    
             }
             catch(Exception e)
             {
@@ -86,13 +99,20 @@ namespace DAL.Repositories
         {
             try
             {
-                var agent =await dbContext.Agents.FindAsync(id);
+                var agent = await dbContext.Agents.FindAsync(id);
 
                 if(agent is null)
                 {
                     throw new Exception("Can't create new Agents");
                 }
 
+                var company = await dbContext.Companies.FindAsync(agent.CompanyId);
+
+                if(company is not null)
+                {
+                    agent.Company = company;
+                }
+                    
                 return agent;
             }
             catch(Exception e)
