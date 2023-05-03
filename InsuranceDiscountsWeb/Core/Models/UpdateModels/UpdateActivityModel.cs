@@ -20,6 +20,6 @@ namespace Core.Models.UpdateModels
 
         public double Calories { get; set; } = -1;
 
-        public Guid UserId { get; set; }
+        public Guid? UserId { get; set; }
     }
 }
