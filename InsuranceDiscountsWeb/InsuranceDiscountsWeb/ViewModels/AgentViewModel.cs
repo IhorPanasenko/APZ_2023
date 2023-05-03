@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using Core.Models;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
-namespace Core.Models
+namespace InsuranceDiscountsWeb.ViewModels
 {
-    public class Agent
+    public class AgentViewModel
     {
-        [Key]
-        public Guid Id { get; set; } = Guid.NewGuid();  
+        public Guid? Id { get; set; }
 
         [Required]
         public string FirstName { get; set; } = String.Empty;
@@ -28,13 +23,14 @@ namespace Core.Models
         public string EmailAddress { get; set; } = String.Empty;
 
         [Required]
+        [Range(0,10)]
         public double Raiting { get; set; }
 
         [Required]
         [ForeignKey("CompanyId")]
         public Guid CompanyId { get; set; }
 
-        [Required]
+        [NotMapped]
         public Company? Company { get; set; }
     }
 }
