@@ -168,7 +168,8 @@ namespace InsuranceDiscountsWeb.Controllers
                 PhoneNumber = agent.PhoneNumber,
                 EmailAddress = agent.EmailAddress,
                 Raiting = agent.Raiting,
-                CompanyId = agent.CompanyId
+                CompanyId = agent.CompanyId,
+                Company = agent.Company
             };
         }
 
