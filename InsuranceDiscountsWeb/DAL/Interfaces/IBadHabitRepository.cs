@@ -11,12 +11,12 @@ namespace DAL.Interfaces
     {
         public Task<List<BadHabit>> GetAll();
 
-        public Task<BadHabit> GetById(Guid id);
+        public Task<BadHabit?> GetById(Guid id);
 
-        public Task<BadHabit> Create(BadHabit badHabit);
+        public Task<BadHabit?> Create(BadHabit badHabit);
 
         public Task<bool> Delete(Guid id);
 
-        public Task<BadHabit> Update(BadHabit badHabit);
+        public Task<BadHabit?> Update(BadHabit badHabit);
     }
 }
