@@ -99,6 +99,7 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 builder.Services.AddScoped<IAgentRepository, AgentRepository>();
 builder.Services.AddScoped<INutritionRepository, NutritionRepository>();
+builder.Services.AddScoped<IStaticMeasurmentsRepository, StaticMeasurmentsRepository>();
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
@@ -106,7 +107,7 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddScoped<IAgentService, AgentService>();
 builder.Services.AddScoped<INutritionService, NutritionService>();
-
+builder.Services.AddScoped<IStaticMeasurmentsService, StaticMeasurmentsService>();
 builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration.GetSection("SendGrid"));
 
 builder.Services.AddCors(options =>
