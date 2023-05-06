@@ -34,6 +34,8 @@ namespace DAL
 
         public DbSet<UserPolicies> UserPolicies { get; set; }
 
+        public DbSet<BadHabit> BadHabits { get; set; }
+
         public InsuranceDiscountsDbContext(DbContextOptions<InsuranceDiscountsDbContext> options) : base(options)
         {
 
