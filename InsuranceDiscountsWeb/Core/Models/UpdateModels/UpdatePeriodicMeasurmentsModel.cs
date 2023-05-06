@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Core.Models.UpdateModels
 {
-    public class UpdatePeriodicMeasurmentsViewModel
+    public class UpdatePeriodicMeasurmentsModel
     {
         [Required]
         public Guid Id { get; set; } = Guid.NewGuid();
