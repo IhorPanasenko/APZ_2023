@@ -109,18 +109,10 @@ namespace DAL.Repositories
         {
             try
             {
-                var oldBadHabit = await dbContext.BadHabits.FindAsync(badHabit.Id);
-
-                if(oldBadHabit is null)
-                {
-                    throw new Exception($"No Habits with id {badHabit.Id}");
-                }
-
-                update(oldBadHabit, badHabit);
-                dbContext.BadHabits.Update(oldBadHabit);
+                dbContext.BadHabits.Update(badHabit);
                 await dbContext.SaveChangesAsync();
 
-                var newBadHabit = await dbContext.BadHabits.FindAsync(oldBadHabit.Id);
+                var newBadHabit = await dbContext.BadHabits.FindAsync(badHabit.Id);
 
                 if(newBadHabit == null)
                 {
@@ -134,14 +126,6 @@ namespace DAL.Repositories
                 logger.LogError(e.Message);
                 return null;
             }
-        }
-
-        private void update(BadHabit oldBadHabit, BadHabit badHabit)
-        {
-            oldBadHabit.Id = badHabit.Id;
-            oldBadHabit.Name = badHabit.Name == null? oldBadHabit.Name : badHabit.Name;
-            oldBadHabit.Level = badHabit.Level <=0 ? oldBadHabit.Level : badHabit.Level;
-            ;
         }
     }
 }
