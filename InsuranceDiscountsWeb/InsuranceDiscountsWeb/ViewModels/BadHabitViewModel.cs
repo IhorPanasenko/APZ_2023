@@ -4,7 +4,6 @@ namespace InsuranceDiscountsWeb.ViewModels
 {
     public class BadHabitViewModel
     {
-        [Required]
         public Guid Id { get; set; }
 
         [Required]
