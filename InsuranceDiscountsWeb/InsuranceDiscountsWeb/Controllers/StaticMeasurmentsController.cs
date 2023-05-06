@@ -12,15 +12,15 @@ namespace InsuranceDiscountsWeb.Controllers
     [ApiController]
     public class StaticMeasurmentsController : ControllerBase
     {
-        private readonly INutritionService nutritionService;
-        private readonly ILogger<NutritionController> logger;
+        private readonly IStaticMeasurmentsService staticMeasurmentsService;
+        private readonly ILogger<StaticMeasurmentsController> logger;
 
-        public NutritionController(
-            INutritionService nutritionService,
-            ILogger<NutritionController> logger
+        public StaticMeasurmentsController(
+            IStaticMeasurmentsService staticMeasurmentsService,
+            ILogger<StaticMeasurmentsController> logger
             )
         {
-            this.nutritionService = nutritionService;
+            this.staticMeasurmentsService = staticMeasurmentsService;
             this.logger = logger;
         }
 
@@ -29,9 +29,9 @@ namespace InsuranceDiscountsWeb.Controllers
         {
             try
             {
-                var nutritions = await nutritionService.GetAll();
-                convert(nutritions);
-                return Ok(nutritions);
+                var staticMeasurmentss = await staticMeasurmentsService.GetAll();
+                convert(staticMeasurmentss);
+                return Ok(staticMeasurmentss);
             }
             catch (Exception e)
             {
@@ -45,15 +45,15 @@ namespace InsuranceDiscountsWeb.Controllers
         {
             try
             {
-                var nutrition = await nutritionService.GetById(id);
+                var staticMeasurments = await staticMeasurmentsService.GetById(id);
 
-                if (nutrition is null)
+                if (staticMeasurments is null)
                 {
-                    return NotFound($"Can't find nutrition with id {id}");
+                    return NotFound($"Can't find staticMeasurments with id {id}");
                 }
 
-                convert(nutrition);
-                return Ok(nutrition);
+                convert(staticMeasurments);
+                return Ok(staticMeasurments);
             }
             catch (Exception e)
             {
@@ -67,9 +67,9 @@ namespace InsuranceDiscountsWeb.Controllers
         {
             try
             {
-                var nutritions = await nutritionService.UserNutritions(userId);
-                convert(nutritions);
-                return Ok(nutritions);
+                var staticMeasurmentss = await staticMeasurmentsService.UserStaticMeasurmentss(userId);
+                convert(staticMeasurmentss);
+                return Ok(staticMeasurmentss);
             }
             catch (Exception e)
             {
@@ -79,7 +79,7 @@ namespace InsuranceDiscountsWeb.Controllers
         }
 
         [HttpPost("Create")]
-        public async Task<IActionResult> Create(NutritionViewModel nutritionViewModel)
+        public async Task<IActionResult> Create(StaticMeasurmentsViewModel staticMeasurmentsViewModel)
         {
             try
             {
@@ -88,9 +88,9 @@ namespace InsuranceDiscountsWeb.Controllers
                     return BadRequest("Model is not valid");
                 }
 
-                var nutrition = convert(nutritionViewModel);
-                var newNutrition = await nutritionService.Create(nutrition);
-                return Ok(newNutrition);
+                var staticMeasurments = convert(staticMeasurmentsViewModel);
+                var newStaticMeasurments = await staticMeasurmentsService.Create(staticMeasurments);
+                return Ok(newStaticMeasurments);
 
             }
             catch (Exception e)
@@ -105,14 +105,14 @@ namespace InsuranceDiscountsWeb.Controllers
         {
             try
             {
-                var result = await nutritionService.Delete(id);
+                var result = await staticMeasurmentsService.Delete(id);
 
                 if (!result)
                 {
-                    return BadRequest($"Cant delete Nutrition with id {id}");
+                    return BadRequest($"Cant delete StaticMeasurments with id {id}");
                 }
 
-                return Ok("Nutrition succesfully deleted");
+                return Ok("StaticMeasurments succesfully deleted");
             }
             catch (Exception e)
             {
@@ -122,16 +122,16 @@ namespace InsuranceDiscountsWeb.Controllers
         }
 
         [HttpPut("Update")]
-        public async Task<IActionResult> Update(NutritionUpdateViewModel updateViewModel)
+        public async Task<IActionResult> Update(UpdateStaticMeasurmentsViewModel updateViewModel)
         {
             try
             {
                 var updateModel = convert(updateViewModel);
-                var result = await nutritionService.Update(updateModel);
+                var result = await staticMeasurmentsService.Update(updateModel);
 
                 if (result is null)
                 {
-                    return BadRequest("Cant update this nutrition watch logging fo rmore information");
+                    return BadRequest("Cant update this staticMeasurments watch logging fo rmore information");
                 }
 
                 return Ok(result);
@@ -143,62 +143,52 @@ namespace InsuranceDiscountsWeb.Controllers
             }
         }
 
-        private List<NutritionViewModel> convert(List<Nutrition> nutritions)
+        private List<StaticMeasurmentsViewModel> convert(List<StaticMeasurments> staticMeasurmentss)
         {
-            List<NutritionViewModel> views = new List<NutritionViewModel>();
+            List<StaticMeasurmentsViewModel> views = new List<StaticMeasurmentsViewModel>();
 
-            foreach (var nutritionItem in nutritions)
+            foreach (var staticMeasurmentsItem in staticMeasurmentss)
             {
-                views.Add(convert(nutritionItem));
+                views.Add(convert(staticMeasurmentsItem));
             }
 
             return views;
         }
 
-        private NutritionViewModel convert(Nutrition nutrition)
+        private StaticMeasurmentsViewModel convert(StaticMeasurments staticMeasurments)
         {
-            return new NutritionViewModel
+            return new StaticMeasurmentsViewModel
             {
-                Id = nutrition.Id,
-                Meal = nutrition.Meal,
-                Food = nutrition.Food,
-                Calories = nutrition.Calories,
-                Fat = nutrition.Fat,
-                Protein = nutrition.Protein,
-                Cards = nutrition.Cards,
-                UserId = nutrition.UserId,
-                AppUser = nutrition.AppUser,
+                Id = staticMeasurments.Id,
+                Height = staticMeasurments.Height,
+                Weight = staticMeasurments.Weight,
+                Waist = staticMeasurments.Waist,
+                UserId = staticMeasurments.UserId,
+                AppUser = staticMeasurments.AppUser,
             };
         }
 
-        private UpdateNutritionModel convert(NutritionUpdateViewModel nutrition)
+        private UpdateStaticMeasurmentsModel convert(UpdateStaticMeasurmentsViewModel staticMeasurments)
         {
-            return new UpdateNutritionModel
+            return new UpdateStaticMeasurmentsModel
             {
-                Id = nutrition.Id,
-                Meal = nutrition.Meal,
-                Food = nutrition.Food,
-                Calories = nutrition.Calories,
-                Fat = nutrition.Fat,
-                Protein = nutrition.Protein,
-                Cards = nutrition.Cards,
-                UserId = nutrition.UserId,
+                Id = staticMeasurments.Id,
+                Height = staticMeasurments.Height,
+                Weight = staticMeasurments.Weight,
+                Waist = staticMeasurments.Waist,
             };
         }
 
-        private Nutrition convert(NutritionViewModel nutrition)
+        private StaticMeasurments convert(StaticMeasurmentsViewModel staticMeasurments)
         {
-            return new Nutrition
+            return new StaticMeasurments
             {
-                Id = nutrition.Id,
-                Meal = nutrition.Meal,
-                Food = nutrition.Food,
-                Calories = nutrition.Calories,
-                Fat = nutrition.Fat,
-                Protein = nutrition.Protein,
-                Cards = nutrition.Cards,
-                UserId = nutrition.UserId,
-                AppUser = nutrition.AppUser,
+                Id = staticMeasurments.Id,
+                Height = staticMeasurments.Height,
+                Weight = staticMeasurments.Weight,
+                Waist = staticMeasurments.Waist,
+                UserId = staticMeasurments.UserId,
+                AppUser = staticMeasurments.AppUser,
             };
         }
     }
