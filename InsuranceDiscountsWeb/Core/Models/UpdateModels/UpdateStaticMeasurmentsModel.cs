@@ -19,6 +19,6 @@ namespace Core.Models.UpdateModels
 
         public double Waist { get; set; } = -1;
 
-        public DateTime? MesurmentDate { get; set; } = DateTime.UtcNow;
+        public DateTime? MesurmentDate { get; set; }
     }
 }
