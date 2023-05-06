@@ -93,7 +93,7 @@ namespace DAL.Repositories
 
                 if(badHabit == null)
                 {
-                    throw new Exception($"No Habits with id {}ids");
+                    throw new Exception($"No Habits with id {id}");
                 }
 
                 return badHabit;
