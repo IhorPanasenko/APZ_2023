@@ -19,7 +19,6 @@ namespace Core.Models
         [Required]
         public bool IsDrinking { get; set; } = false;
 
-
         [ForeignKey("UserId")]
         public Guid UserId { get; set; }
 
