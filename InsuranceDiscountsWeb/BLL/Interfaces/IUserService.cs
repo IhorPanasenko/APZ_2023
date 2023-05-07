@@ -13,7 +13,7 @@ namespace BLL.Interfaces
     {
         public Task<List<AppUser>> GetAllUsers();
         public Task<AppUser?> GetUserByEmail(string email);
-        public Task<AppUser?> GetUserById(string userId);
+        public Task<AppUser?> GetUserById(Guid userId);
         public Task<bool> UpdateUser(UpdateAppUserModel user);
         public Task<bool> DeleteUser(string email);
     }
