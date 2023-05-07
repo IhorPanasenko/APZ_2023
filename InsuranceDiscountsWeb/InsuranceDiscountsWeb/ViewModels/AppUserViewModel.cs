@@ -24,8 +24,8 @@ namespace InsuranceDiscountsWeb.ViewModels
         public string? PhoneNumber { get; set; }
 
         [Required]
-        public string? Address { get; set; }
+        public string Address { get; set; } = String.Empty;
 
-        public List<RoleViewModel> Roles { get; set; } = new List<RoleViewModel>();
+        public List<string> Roles { get; set; } = new List<string>();
     }
 }
