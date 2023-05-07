@@ -4,6 +4,8 @@ namespace InsuranceDiscountsWeb.ViewModels.UpdateViewModels
 {
     public class UserUpdateViewModel
     {
+        [Required]
+        public Guid Id { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? UserName { get; set; }
@@ -15,6 +17,5 @@ namespace InsuranceDiscountsWeb.ViewModels.UpdateViewModels
         public string? PhoneNumber { get; set; }
 
         public string? Address { get; set; }
-
     }
 }
