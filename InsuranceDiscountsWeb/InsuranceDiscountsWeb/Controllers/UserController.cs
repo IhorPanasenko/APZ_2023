@@ -1,6 +1,6 @@
 ﻿using BLL.Interfaces;
 using Core.Models;
-using InsuranceDiscountsWeb.ViewModels;
+using InsuranceDiscountsWeb.ViewModels.UpdateViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -102,32 +102,34 @@ namespace InsuranceDiscountsWeb.Controllers
             }
         }
 
-        private AppUser? convert(string userId, UserUpdateViewModel userUpdateViewModel)
-        {
-            try
-            {
-                var user = userService.GetUserById(userId);
 
-                if (user == null)
-                {
-                    throw new Exception($"Can't get user with Id {userId} from database");
-                }
 
-                return new AppUser
-                {
-                    Id = userId,
-                    FirstName = userUpdateViewModel.FirstName,
-                    LastName = userUpdateViewModel.LastName,
-                    Email = userUpdateViewModel.Email,
-                    PhoneNumber = userUpdateViewModel.PhoneNumber,
-                    UserName = userUpdateViewModel.UserName
-                };
-            }
-            catch(Exception e)
-            {
-                logger.LogError(e.Message);
-                return null;
-            }
-        }
+        //private AppUser? convert(string userId, UserUpdateViewModel userUpdateViewModel)
+        //{
+        //    try
+        //    {
+        //        var user = userService.GetUserById(userId);
+
+        //        if (user == null)
+        //        {
+        //            throw new Exception($"Can't get user with Id {userId} from database");
+        //        }
+
+        //        return new AppUser
+        //        {
+        //            Id = userId,
+        //            FirstName = userUpdateViewModel.FirstName,
+        //            LastName = userUpdateViewModel.LastName,
+        //            Email = userUpdateViewModel.Email,
+        //            PhoneNumber = userUpdateViewModel.PhoneNumber,
+        //            UserName = userUpdateViewModel.UserName
+        //        };
+        //    }
+        //    catch(Exception e)
+        //    {
+        //        logger.LogError(e.Message);
+        //        return null;
+        //    }
+        //}
     }
 }
