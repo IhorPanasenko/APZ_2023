@@ -35,7 +35,13 @@ namespace DAL.Services
         {
             try
             {
+                var habits = await dbContext.UserBadHabits.Where(ubh => ubh.UserId.ToString() == user.Id).ToListAsync();
+                var policies = await dbContext.UserPolicies.Where(up => up.UserId.ToString() == user.Id).ToListAsync();
+
+                dbContext.UserBadHabits.RemoveRange(habits);
+                dbContext.UserPolicies.RemoveRange(policies);
                 dbContext.AppUsers.Remove(user);
+
                 await dbContext.SaveChangesAsync();
                 return true;
             }
