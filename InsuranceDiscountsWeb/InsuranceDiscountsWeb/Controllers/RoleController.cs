@@ -1,6 +1,7 @@
 ﻿using Core.Models;
 using DAL;
 using InsuranceDiscountsWeb.ViewModels;
+using InsuranceDiscountsWeb.ViewModels.UpdateViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

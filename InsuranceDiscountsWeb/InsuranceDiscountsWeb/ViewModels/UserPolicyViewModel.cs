@@ -1,30 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using Core.Models;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
-namespace Core.Models
+namespace InsuranceDiscountsWeb.ViewModels
 {
-    public class UserPolicies
+    public class UserPolicyViewModel
     {
-        [Key]
         public Guid Id { get; set; } = Guid.NewGuid();
 
         [Required]
         public DateTime StartDate { get; set; } = DateTime.UtcNow;
 
-        [Required] 
-        public DateTime EndDate { get; set; } = DateTime.UtcNow;
+        [Required]
+        public DateTime EndDate { get; set; } = DateTime.UtcNow.AddDays(30);
 
-        [ForeignKey("UserId")]
+        [Required]
         public Guid UserId { get; set; }
 
         public AppUser? AppUser { get; set; }
 
-        [ForeignKey("PolicyId")]
+        [Required]
         public Guid PolicyId { get; set; }
 
         public Policy? Policy { get; set; }

@@ -1,21 +1,10 @@
 ﻿using Core.Models;
 using DAL.Interfaces;
-using DAL.Repositories;
-using InsuranceDiscountsWeb.Managers;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace DAL.Services
 {
@@ -46,7 +35,13 @@ namespace DAL.Services
         {
             try
             {
+                var habits = await dbContext.UserBadHabits.Where(ubh => ubh.UserId.ToString() == user.Id).ToListAsync();
+                var policies = await dbContext.UserPolicies.Where(up => up.UserId.ToString() == user.Id).ToListAsync();
+
+                dbContext.UserBadHabits.RemoveRange(habits);
+                dbContext.UserPolicies.RemoveRange(policies);
                 dbContext.AppUsers.Remove(user);
+
                 await dbContext.SaveChangesAsync();
                 return true;
             }
@@ -66,7 +61,6 @@ namespace DAL.Services
             for (int i = 0; i < users.Count; i++)
             {
                 var oneUserRoles = userRoles.Where(x => x.UserId == users[i].Id).ToList();
-                //var appUser = convert(users[i]);
 
                 if (oneUserRoles.Count == 0)
                 {
@@ -108,11 +102,11 @@ namespace DAL.Services
             }
         }
 
-        public async Task<AppUser?> GetUserById(string userId)
+        public async Task<AppUser?> GetUserById(Guid userId)
         {
             try
             {
-                var user = await userManager.FindByIdAsync(userId);
+                var user = await userManager.FindByIdAsync(userId.ToString());
 
                 if (user is null)
                 {
@@ -150,28 +144,6 @@ namespace DAL.Services
                 logger.LogError(e.Message);
                 return false;
             }
-        }
-
-        private AppUser convert(IdentityUser identityUser)
-        {
-            return new AppUser
-            {
-                UserName = identityUser.UserName,
-                Email = identityUser.Email,
-                Id = identityUser.Id,
-                PhoneNumber = identityUser.PhoneNumber,
-            };
-        }
-
-        private IdentityUser convert(AppUser appUser)
-        {
-            return new IdentityUser
-            {
-                UserName = appUser.UserName,
-                Email = appUser.Email,
-                Id = appUser.Id,
-                PhoneNumber = appUser.PhoneNumber,
-            };
         }
     }
 }

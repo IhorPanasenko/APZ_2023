@@ -1,4 +1,5 @@
 ﻿using Core.Models;
+using Core.Models.UpdateModels;
 using InsuranceDiscountsWeb.Managers;
 using System;
 using System.Collections.Generic;
@@ -12,8 +13,8 @@ namespace BLL.Interfaces
     {
         public Task<List<AppUser>> GetAllUsers();
         public Task<AppUser?> GetUserByEmail(string email);
-        public Task<AppUser?> GetUserById(string userId);
-        public Task<bool> UpdateUser(AppUser user);
+        public Task<AppUser?> GetUserById(Guid userId);
+        public Task<bool> UpdateUser(UpdateAppUserModel user);
         public Task<bool> DeleteUser(string email);
     }
 }

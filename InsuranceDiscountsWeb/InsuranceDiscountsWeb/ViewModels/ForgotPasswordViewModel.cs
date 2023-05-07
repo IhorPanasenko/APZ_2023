@@ -6,6 +6,6 @@ namespace InsuranceDiscountsWeb.ViewModels
     {
         [Required]
         [EmailAddress]
-        public string Email { get; set; }
+        public string Email { get; set; } = String.Empty;
     }
 }

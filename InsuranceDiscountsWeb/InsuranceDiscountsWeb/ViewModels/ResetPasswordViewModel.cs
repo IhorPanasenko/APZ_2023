@@ -7,19 +7,19 @@ namespace InsuranceDiscountsWeb.ViewModels
     {
         [Required]
         [EmailAddress]
-        public string Email { get; set; }
+        public string Email { get; set; } = String.Empty;
 
         [Required]
         [DataType(DataType.Password)]
         [MinLength(5)]
-        public string NewPassword { get; set; }
+        public string NewPassword { get; set; } = String.Empty;
 
         [Required]
         [DataType(DataType.Password)]
         [MinLength(5)]
-        public string ConfirmationNewPassword { get; set; }
+        public string ConfirmationNewPassword { get; set; } = String.Empty;
 
         [Required]
-        public string Code { get; set; }
+        public string Code { get; set; } = String.Empty;
     }
 }

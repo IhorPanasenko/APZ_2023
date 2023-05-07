@@ -1,10 +1,9 @@
 ﻿using BLL.Interfaces;
 using Core.Models;
+using Core.Models.UpdateModels;
 using InsuranceDiscountsWeb.ViewModels;
-using Microsoft.AspNetCore.Http;
+using InsuranceDiscountsWeb.ViewModels.UpdateViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System.Linq.Expressions;
 
 namespace InsuranceDiscountsWeb.Controllers
 {
@@ -27,6 +26,7 @@ namespace InsuranceDiscountsWeb.Controllers
             try
             {
                 var users = await userService.GetAllUsers();
+                var userViews = convert(users);
                 return Ok(users);
             }
             catch (Exception e)
@@ -36,12 +36,20 @@ namespace InsuranceDiscountsWeb.Controllers
             }
         }
 
+        
         [HttpGet("GetByEmail")]
         public async Task<IActionResult> GetByEmail(string email)
         {
             try
             {
                 var user = await userService.GetUserByEmail(email);
+
+                if(user == null)
+                {
+                    return NotFound($"Can't find user with Email {email}");
+                }
+
+                var userView = convert(user);
                 return Ok(user);
             }
             catch (Exception e)
@@ -51,12 +59,27 @@ namespace InsuranceDiscountsWeb.Controllers
             }
         }
 
+        private AppUserViewModel convert(AppUser user)
+        {
+            return new AppUserViewModel
+            {
+                Id = Guid.Parse(user!.Id),
+                UserName = user.UserName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Address = user.Address,
+                Roles = user.UserRoles
+            };
+        }
+
         [HttpGet("GetById")]
-        public async Task<IActionResult> GetById(string userId)
+        public async Task<IActionResult> GetById(Guid userId)
         {
             try
             {
-                var user = await userService.GetUserByEmail(userId);
+                var user = await userService.GetUserById(userId);
                 return Ok(user);
             }
             catch (Exception e)
@@ -80,16 +103,18 @@ namespace InsuranceDiscountsWeb.Controllers
             }
         }
 
+
+
         [HttpPost("Update")]
-        public async Task<IActionResult> UpdateUser(string userId, UserUpdateViewModel userUpdateViewModel)
+        public async Task<IActionResult> UpdateUser(UserUpdateViewModel userUpdateViewModel)
         {
             try
             {
-                var appUser = convert(userId, userUpdateViewModel);
+                var appUser = convert(userUpdateViewModel);
 
                 if(appUser is null)
                 {
-                    return BadRequest($"Can't get user with Id {userId} from Database");
+                    return BadRequest($"Can't get user with Id {userUpdateViewModel.Id} from Database");
                 }
 
                 return Ok(await userService.UpdateUser(appUser));
@@ -102,32 +127,30 @@ namespace InsuranceDiscountsWeb.Controllers
             }
         }
 
-        private AppUser? convert(string userId, UserUpdateViewModel userUpdateViewModel)
+        private UpdateAppUserModel convert(UserUpdateViewModel userUpdateViewModel)
         {
-            try
+            return new UpdateAppUserModel
             {
-                var user = userService.GetUserById(userId);
+                Id = userUpdateViewModel.Id,
+                UserName = userUpdateViewModel.UserName,
+                Email = userUpdateViewModel.Email,
+                PhoneNumber = userUpdateViewModel.PhoneNumber,
+                FirstName = userUpdateViewModel.FirstName,
+                LastName = userUpdateViewModel.LastName,
+                Address = userUpdateViewModel.Address
+            };
+        }
 
-                if (user == null)
-                {
-                    throw new Exception($"Can't get user with Id {userId} from database");
-                }
+        private List<AppUserViewModel> convert(List<AppUser> users)
+        {
+            List<AppUserViewModel> result = new List<AppUserViewModel>();
 
-                return new AppUser
-                {
-                    Id = userId,
-                    FirstName = userUpdateViewModel.FirstName,
-                    LastName = userUpdateViewModel.LastName,
-                    Email = userUpdateViewModel.Email,
-                    PhoneNumber = userUpdateViewModel.PhoneNumber,
-                    UserName = userUpdateViewModel.UserName
-                };
-            }
-            catch(Exception e)
+            foreach (var user in users)
             {
-                logger.LogError(e.Message);
-                return null;
+                result.Add(convert(user));
             }
+
+            return result;
         }
     }
 }
