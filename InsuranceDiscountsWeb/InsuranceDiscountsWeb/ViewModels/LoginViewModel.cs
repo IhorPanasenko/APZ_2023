@@ -8,11 +8,11 @@ namespace InsuranceDiscountsWeb.ViewModels
     {
         [Required]
         [EmailAddress]
-        public string EmailAddress { get; set; }
+        public string EmailAddress { get; set; } = String.Empty;
 
         [Required]
         [PasswordPropertyText]
         [DataType(DataType.Password)]
-        public string Password { get; set; } 
+        public string Password { get; set; } = String.Empty;
     }
 }
