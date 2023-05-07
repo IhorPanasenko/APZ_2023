@@ -65,7 +65,7 @@ namespace InsuranceDiscountsWeb.Controllers
             try
             {
                 var userBad = convert(viewModel);
-                var res = userBadHabitService.Create(userBad);
+                var res =  await userBadHabitService.Create(userBad);
 
                 if(res is null)
                 {
@@ -137,6 +137,5 @@ namespace InsuranceDiscountsWeb.Controllers
                 BadHabit = userBadHabits.BadHabit
             };
         }
-
     }
 }
