@@ -1,5 +1,6 @@
 ﻿using BLL.Interfaces;
 using Core.Models;
+using Core.Models.UpdateModels;
 using DAL.Interfaces;
 using DAL.Services;
 using InsuranceDiscountsWeb.Managers;
@@ -91,7 +92,7 @@ namespace BLL.Services
             }
         }
 
-        public async Task<AppUser?> GetUserById(string userId)
+        public async Task<AppUser?> GetUserById(Guid userId)
         {
             try
             {
@@ -105,17 +106,35 @@ namespace BLL.Services
             }
         }
 
-        public async Task<bool> UpdateUser(AppUser user)
+        public async Task<bool> UpdateUser(UpdateAppUserModel updateUser)
         {
             try
             {
-              return await userRepository.UpdateUser(user);    
+                var oldUser = await userRepository.GetUserById(updateUser.Id);
+
+                if(oldUser == null)
+                {
+                    throw new Exception($"Can't find user with Id {updateUser.Id}");
+                }
+
+                update(oldUser, updateUser);
+                return await userRepository.UpdateUser(oldUser);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 logger.LogError(e.Message);
                 return false;
             }
+        }
+
+        private void update(AppUser oldUser, UpdateAppUserModel updateUser)
+        {
+            oldUser.UserName = String.IsNullOrEmpty(updateUser.UserName) ? oldUser.UserName : updateUser.UserName;
+            oldUser.FirstName = String.IsNullOrEmpty(updateUser.FirstName) ? oldUser.FirstName : updateUser.FirstName;
+            oldUser.LastName = String.IsNullOrEmpty(updateUser.LastName) ? oldUser.LastName : updateUser.LastName;
+            oldUser.Email = String.IsNullOrEmpty(updateUser.Email) ? oldUser.Email :updateUser.Email;
+            oldUser.Address = String.IsNullOrEmpty(updateUser.Address) ? oldUser.Address : updateUser.Address;
+            oldUser.PhoneNumber = String.IsNullOrEmpty(updateUser.PhoneNumber) ? oldUser.PhoneNumber : updateUser.PhoneNumber;
         }
     }
 }
