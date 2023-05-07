@@ -96,11 +96,11 @@ namespace DAL.Services
             }
         }
 
-        public async Task<AppUser?> GetUserById(string userId)
+        public async Task<AppUser?> GetUserById(Guid userId)
         {
             try
             {
-                var user = await userManager.FindByIdAsync(userId);
+                var user = await userManager.FindByIdAsync(userId.ToString());
 
                 if (user is null)
                 {
