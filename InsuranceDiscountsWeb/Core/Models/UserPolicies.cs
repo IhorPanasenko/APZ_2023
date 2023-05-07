@@ -22,7 +22,7 @@ namespace Core.Models
         [ForeignKey("UserId")]
         public Guid UserId { get; set; }
 
-        public AppUser? User { get; set; }
+        public AppUser? AppUser { get; set; }
 
         [ForeignKey("PolicyId")]
         public Guid PolicyId { get; set; }
