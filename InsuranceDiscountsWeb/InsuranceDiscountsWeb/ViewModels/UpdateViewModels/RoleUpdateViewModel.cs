@@ -1,4 +1,4 @@
-﻿namespace InsuranceDiscountsWeb.ViewModels
+﻿namespace InsuranceDiscountsWeb.ViewModels.UpdateViewModels
 {
     public class RoleUpdateViewModel
     {
