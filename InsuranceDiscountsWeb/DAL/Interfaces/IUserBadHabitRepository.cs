@@ -16,7 +16,7 @@ namespace DAL.Interfaces
 
         public Task<List<UserBadHabits>> GetAll();
 
-        public Task<List<UserBadHabits>> GetByUser();
+        public Task<List<UserBadHabits>> GetByUser(Guid userId);
 
     }
 }
