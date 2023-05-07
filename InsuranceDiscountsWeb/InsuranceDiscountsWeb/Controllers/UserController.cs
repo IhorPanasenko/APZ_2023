@@ -103,6 +103,8 @@ namespace InsuranceDiscountsWeb.Controllers
             }
         }
 
+
+
         [HttpPost("Update")]
         public async Task<IActionResult> UpdateUser(UserUpdateViewModel userUpdateViewModel)
         {
