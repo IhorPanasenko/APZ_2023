@@ -143,7 +143,7 @@ namespace BLL.Services
             oldUser.PhoneNumber = String.IsNullOrEmpty(updateUser.PhoneNumber) ? oldUser.PhoneNumber : updateUser.PhoneNumber;
         }
 
-        public async Task CalculateDiscount(Guid userId)
+        public async Task<double> CalculateDiscount(Guid userId)
         {
             var oldUser = await userRepository.GetUserById(userId);
 
@@ -162,11 +162,13 @@ namespace BLL.Services
 
                 var discount = nutritionCoeficient + activitiesCoeficient + staticMeasurmentsCoeficient + periodicMeasurmentsCoeficient + badHabitsCoeficient;
                 oldUser.Discount = discount;
-
+                await userRepository.UpdateUser(oldUser);
+                return discount;
             }
             catch (Exception e)
             {
                 logger.LogError(e.Message);
+                return 0;
             }
         }
 
