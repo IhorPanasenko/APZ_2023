@@ -32,5 +32,7 @@ namespace Core.Models
         [Required]
         [Url]
         public string WebsiteAddress { get; set; } = String.Empty;
+
+        public int MaxDiscountPercentage{ get; set; } = 30;
     }
 }
