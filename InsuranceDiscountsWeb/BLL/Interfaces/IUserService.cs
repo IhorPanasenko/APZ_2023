@@ -16,5 +16,6 @@ namespace BLL.Interfaces
         public Task<AppUser?> GetUserById(Guid userId);
         public Task<bool> UpdateUser(UpdateAppUserModel user);
         public Task<bool> DeleteUser(string email);
+        public Task CalculateDiscount(Guid userId);
     }
 }
