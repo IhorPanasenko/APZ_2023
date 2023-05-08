@@ -16,6 +16,9 @@ namespace InsuranceDiscountsWeb.ViewModels
         public string UserName { get; set; } = String.Empty;
 
         [Required]
+        public DateTime BirthdayDate { get; set; }
+
+        [Required]
         [EmailAddress]
         public string Email { get; set; } = String.Empty;
 

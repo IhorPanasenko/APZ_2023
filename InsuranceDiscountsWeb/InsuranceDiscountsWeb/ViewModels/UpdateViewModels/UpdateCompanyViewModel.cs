@@ -21,5 +21,7 @@ namespace InsuranceDiscountsWeb.ViewModels.UpdateViewModels
 
         [Url]
         public string? WebsiteAddress { get; set; }
+
+        public int MaxDiscountPercentage { get; set; } = -1;
     }
 }

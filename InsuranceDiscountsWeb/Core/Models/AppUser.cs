@@ -17,6 +17,8 @@ namespace Core.Models
 
         public string Address { get; set; } = String.Empty;
 
+        public DateTime BirthdayDate { get; set; }
+
         [Range(0,50)]
         public double Discount { get; set; } = 0;
 

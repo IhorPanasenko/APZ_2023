@@ -10,6 +10,8 @@ namespace InsuranceDiscountsWeb.ViewModels.UpdateViewModels
         public string? LastName { get; set; }
         public string? UserName { get; set; }
 
+        public DateTime? BirthdayDate { get; set; }
+
         [EmailAddress]
         public string? Email { get; set; }
 
