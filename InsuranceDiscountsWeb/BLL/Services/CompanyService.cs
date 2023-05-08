@@ -119,6 +119,7 @@ namespace BLL.Services
             oldCompany.PhoneNumber = String.IsNullOrEmpty (updateCompany.PhoneNumber) ? oldCompany.PhoneNumber : updateCompany.PhoneNumber;
             oldCompany.EmailAddress = String.IsNullOrEmpty(updateCompany.EmailAddress) ? oldCompany.EmailAddress : updateCompany.EmailAddress;
             oldCompany.WebsiteAddress = String.IsNullOrEmpty(updateCompany.WebsiteAddress) ? oldCompany.WebsiteAddress : updateCompany.WebsiteAddress; 
+            oldCompany.MaxDiscountPercentage = updateCompany.MaxDiscountPercentage <= 0 ? oldCompany.MaxDiscountPercentage : updateCompany.MaxDiscountPercentage;
         }
     }
 }
