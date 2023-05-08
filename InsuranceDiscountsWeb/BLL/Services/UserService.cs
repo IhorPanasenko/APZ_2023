@@ -26,18 +26,33 @@ namespace BLL.Services
         private readonly IConfiguration configuration;
         private readonly IUserRepository userRepository;
         private readonly UserManager<AppUser> userManager;
+        private readonly INutritionRepository nutritionRepository;
+        private readonly IActivityRepository activityRepository;
+        private readonly IStaticMeasurmentsRepository staticMeasurmentsRepository;
+        private readonly IPeriodicMeasurmentsRepository periodicMeasurmentsRepository;
+        private readonly IUserBadHabitRepository userBadHabitRepository;
 
         public UserService(
             ILogger<UserService> logger,
             IConfiguration configuration,
             IUserRepository userRepository,
-            UserManager<AppUser> userManager
+            UserManager<AppUser> userManager,
+            INutritionRepository nutritionRepository,
+            IActivityRepository activityRepository,
+            IStaticMeasurmentsRepository staticMeasurmentsRepository,
+            IPeriodicMeasurmentsRepository periodicMeasurmentsRepository,
+            IUserBadHabitRepository userBadHabitRepository
             )
         {
             this.logger = logger;
             this.configuration = configuration;
             this.userRepository = userRepository;
             this.userManager = userManager;
+            this.nutritionRepository = nutritionRepository;
+            this.activityRepository = activityRepository;
+            this.staticMeasurmentsRepository = staticMeasurmentsRepository;
+            this.periodicMeasurmentsRepository = periodicMeasurmentsRepository;
+            this.userBadHabitRepository = userBadHabitRepository;
         }
 
         public async Task<bool> DeleteUser(string email)
@@ -132,9 +147,23 @@ namespace BLL.Services
             oldUser.UserName = String.IsNullOrEmpty(updateUser.UserName) ? oldUser.UserName : updateUser.UserName;
             oldUser.FirstName = String.IsNullOrEmpty(updateUser.FirstName) ? oldUser.FirstName : updateUser.FirstName;
             oldUser.LastName = String.IsNullOrEmpty(updateUser.LastName) ? oldUser.LastName : updateUser.LastName;
+            oldUser.BirthdayDate = (DateTime)(updateUser.BirthdayDate == null ? oldUser.BirthdayDate : updateUser.BirthdayDate);
             oldUser.Email = String.IsNullOrEmpty(updateUser.Email) ? oldUser.Email :updateUser.Email;
             oldUser.Address = String.IsNullOrEmpty(updateUser.Address) ? oldUser.Address : updateUser.Address;
             oldUser.PhoneNumber = String.IsNullOrEmpty(updateUser.PhoneNumber) ? oldUser.PhoneNumber : updateUser.PhoneNumber;
+        }
+
+        public Task CalculateDiscount(Guid userId)
+        {
+            try
+            {
+                var nutritions = 
+            }
+            catch(Exception e)
+            {
+                logger.LogError(e.Message);
+
+            }
         }
     }
 }
