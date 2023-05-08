@@ -26,5 +26,7 @@ namespace Core.Models.UpdateModels
 
         [Url]
         public string? WebsiteAddress { get; set; }
+
+        public int MaxDiscountPercentage { get; set; } = 30;
     }
 }
