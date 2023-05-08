@@ -162,6 +162,7 @@ namespace InsuranceDiscountsWeb.Controllers
                 PhoneNumber = companyViewModel.PhoneNumber,
                 EmailAddress = companyViewModel.EmailAddress,
                 WebsiteAddress = companyViewModel.WebsiteAddress,
+                MaxDiscountPercentage = companyViewModel.MaxDiscountPercentage
             };
         }
 
@@ -175,7 +176,8 @@ namespace InsuranceDiscountsWeb.Controllers
                 Address = company.Address,
                 PhoneNumber = company.PhoneNumber,
                 EmailAddress = company.EmailAddress,
-                WebsiteAddress = company.WebsiteAddress,
+                MaxDiscountPercentage= company.MaxDiscountPercentage,
+                WebsiteAddress = company.WebsiteAddress
             };
         }
 
@@ -190,6 +192,7 @@ namespace InsuranceDiscountsWeb.Controllers
                 PhoneNumber = updateCompanyView.PhoneNumber,
                 EmailAddress = updateCompanyView.EmailAddress,
                 WebsiteAddress = updateCompanyView.WebsiteAddress,
+                MaxDiscountPercentage = updateCompanyView.MaxDiscountPercentage
             };
         }
     }
