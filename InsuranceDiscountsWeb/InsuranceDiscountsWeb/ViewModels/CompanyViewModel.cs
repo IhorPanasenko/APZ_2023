@@ -28,5 +28,8 @@ namespace InsuranceDiscountsWeb.ViewModels
 
         [Required]
         public string WebsiteAddress { get; set; } = String.Empty;
+
+        [Required]
+        public int MaxDiscountPercentage { get; set; } = 30;
     }
 }
