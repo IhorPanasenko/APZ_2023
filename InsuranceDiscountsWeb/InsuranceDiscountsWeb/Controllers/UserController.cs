@@ -126,6 +126,22 @@ namespace InsuranceDiscountsWeb.Controllers
             }
         }
 
+        [HttpPost("CalculateDiscount")]
+        public async Task<IActionResult> CalculateDiscount(Guid userId)
+        {
+            try{
+                var discount = await userService.CalculateDiscount(userId);
+                return Ok($"User discount is: {discount}");
+            }
+            catch(Exception e)
+            {
+                logger.LogError(e.Message);
+                return BadRequest(e.Message);
+
+            }
+
+        }
+
         private UpdateAppUserModel convert(UserUpdateViewModel userUpdateViewModel)
         {
             return new UpdateAppUserModel
