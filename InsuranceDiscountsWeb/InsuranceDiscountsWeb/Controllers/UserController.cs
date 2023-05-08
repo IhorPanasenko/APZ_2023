@@ -69,6 +69,7 @@ namespace InsuranceDiscountsWeb.Controllers
                 PhoneNumber = user.PhoneNumber,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
+                BirthdayDate = user.BirthdayDate,
                 Address = user.Address,
                 Roles = user.UserRoles
             };
@@ -103,8 +104,6 @@ namespace InsuranceDiscountsWeb.Controllers
             }
         }
 
-
-
         [HttpPost("Update")]
         public async Task<IActionResult> UpdateUser(UserUpdateViewModel userUpdateViewModel)
         {
@@ -135,6 +134,7 @@ namespace InsuranceDiscountsWeb.Controllers
                 UserName = userUpdateViewModel.UserName,
                 Email = userUpdateViewModel.Email,
                 PhoneNumber = userUpdateViewModel.PhoneNumber,
+                BirthdayDate = userUpdateViewModel.BirthdayDate,
                 FirstName = userUpdateViewModel.FirstName,
                 LastName = userUpdateViewModel.LastName,
                 Address = userUpdateViewModel.Address
