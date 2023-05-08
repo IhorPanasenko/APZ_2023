@@ -7,10 +7,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BLL.Interfaces;
 
 namespace BLL.Services
 {
-    public class ActivityService
+    public class ActivityService:IActivityService
     {
         private readonly IActivityRepository activityRepository;
         private readonly ILogger<ActivityService> logger;

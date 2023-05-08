@@ -103,6 +103,7 @@ builder.Services.AddScoped<IStaticMeasurmentsRepository, StaticMeasurmentsReposi
 builder.Services.AddScoped<IPeriodicMeasurmentsRepository, PeriodicMeasurmentsRepository>();
 builder.Services.AddScoped<IBadHabitRepository, BadHabitRepository>();
 builder.Services.AddScoped<IUserBadHabitRepository, UserBadHabitRepository>();
+builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
@@ -114,6 +115,7 @@ builder.Services.AddScoped<IStaticMeasurmentsService, StaticMeasurmentsService>(
 builder.Services.AddScoped<IPeriodicMeasurmentsService, PeriodicMeasurmentsService>();
 builder.Services.AddScoped<IBadHabitService, BadHabitService>();
 builder.Services.AddScoped<IUserBadHabitService, UserBadHabitService>();
+builder.Services.AddScoped<IActivityService, ActivityService>();
 
 builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration.GetSection("SendGrid"));
 
