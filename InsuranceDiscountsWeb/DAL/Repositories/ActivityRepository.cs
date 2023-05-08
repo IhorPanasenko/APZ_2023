@@ -1,4 +1,5 @@
 ﻿using Core.Models;
+using DAL.Interfaces;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Repositories
 {
-    public class ActivityRepository
+    public class ActivityRepository:IActivityRepository
     {
         private readonly InsuranceDiscountsDbContext dbContext;
         private readonly ILogger<ActivityRepository> logger;
