@@ -19,5 +19,7 @@ namespace BLL.Interfaces
         public Task<bool> Delete(Guid id);
 
         public Task<bool> Update(UpdateCompanyModel company);
+
+        public Task<List<Company>> SearchByName(string searchString);
     }
 }
