@@ -19,5 +19,7 @@ namespace DAL.Interfaces
         public Task<bool> Delete(Guid id);
 
         public Task<Agent?> Update(Agent agent);
+
+        public Task<List<Agent>> GetAgentsByCompany(Guid companyId);
     }
 }

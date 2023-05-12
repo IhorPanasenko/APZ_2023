@@ -3,6 +3,7 @@ using Core.Models;
 using Core.Models.UpdateModels;
 using InsuranceDiscountsWeb.ViewModels;
 using InsuranceDiscountsWeb.ViewModels.UpdateViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,6 +26,7 @@ namespace InsuranceDiscountsWeb.Controllers
         }
 
         [HttpGet("GetById")]
+        [Authorize]
         public async Task<IActionResult> GetById(Guid id)
         {
             try
@@ -47,6 +49,7 @@ namespace InsuranceDiscountsWeb.Controllers
         }
 
         [HttpGet("GetAll")]
+        [Authorize]
         public async Task<IActionResult> GetAll()
         {
             try
@@ -62,7 +65,25 @@ namespace InsuranceDiscountsWeb.Controllers
             }
         }
 
+        [HttpGet("GetAgentsByCompany")]
+        [Authorize]
+        public async Task<IActionResult> GetAgentsByCompany(Guid companyId)
+        {
+            try
+            {
+                var agents = await agentService.GetAgentsByCompany(companyId);
+                var agentViews = convert(agents);
+                return Ok(agentViews);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.Message);
+                return BadRequest(e.Message);
+            }
+        }
+
         [HttpPost("Create")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Create(AgentViewModel agentViewModel)
         {
             if (!ModelState.IsValid)
@@ -90,6 +111,7 @@ namespace InsuranceDiscountsWeb.Controllers
         }
 
         [HttpDelete]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Delete(Guid id)
         {
             try
@@ -111,6 +133,7 @@ namespace InsuranceDiscountsWeb.Controllers
         }
 
         [HttpPut("Update")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Update(UpdateAgentViewModel updateAgentViewModel)
         {
             try

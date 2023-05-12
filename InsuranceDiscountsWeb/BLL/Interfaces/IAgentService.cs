@@ -19,5 +19,7 @@ namespace BLL.Interfaces
         public Task<bool> Delete(Guid id);
 
         public Task<Agent?> Update(UpdateAgentModel agent);
+
+        public Task<List<Agent>> GetAgentsByCompany(Guid companyId);
     }
 }

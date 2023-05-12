@@ -5,13 +5,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace DAL.Repositories
 {
-    public class AgentRepository:IAgentRepository
+    public class AgentRepository : IAgentRepository
     {
         private readonly ILogger<AgentRepository> logger;
         private readonly InsuranceDiscountsDbContext dbContext;
@@ -39,7 +40,7 @@ namespace DAL.Repositories
                 agent.Company = company;
                 return agent;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 logger.LogError(e.Message);
                 return null;
@@ -51,7 +52,7 @@ namespace DAL.Repositories
         {
             try
             {
-               var agent = await dbContext.Agents.FindAsync(id);
+                var agent = await dbContext.Agents.FindAsync(id);
 
                 if (agent is null)
                 {
@@ -62,11 +63,39 @@ namespace DAL.Repositories
                 await dbContext.SaveChangesAsync();
                 return true;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 logger.LogError(e.Message);
                 return false;
             }
+        }
+
+        public async Task<List<Agent>> GetAgentsByCompany(Guid companyId)
+        {
+            List<Agent> agents = new List<Agent>();
+
+            try
+            {
+                var company = await dbContext.Companies.FindAsync(companyId);
+
+                if (company is null)
+                {
+                    throw new ArgumentException($"No companies with id: {companyId}");
+                }
+
+                var temp_agents = await dbContext.Agents.Where(a => a.CompanyId == companyId).ToListAsync();
+
+                foreach (var agent in agents)
+                {
+                    agent.Company = company;
+                }
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.Message);
+            }
+
+            return agents;
         }
 
         public async Task<List<Agent>> GetAll()
@@ -75,9 +104,9 @@ namespace DAL.Repositories
 
             try
             {
-                agents =await dbContext.Agents.ToListAsync();
+                agents = await dbContext.Agents.ToListAsync();
 
-                foreach(var agent in agents)
+                foreach (var agent in agents)
                 {
                     var company = await dbContext.Companies.FindAsync(agent.CompanyId);
 
@@ -85,9 +114,9 @@ namespace DAL.Repositories
                     {
                         agent.Company = company;
                     }
-                }    
+                }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 logger.LogError(e.Message);
             }
@@ -101,21 +130,21 @@ namespace DAL.Repositories
             {
                 var agent = await dbContext.Agents.FindAsync(id);
 
-                if(agent is null)
+                if (agent is null)
                 {
                     throw new Exception("Can't create new Agents");
                 }
 
                 var company = await dbContext.Companies.FindAsync(agent.CompanyId);
 
-                if(company is not null)
+                if (company is not null)
                 {
                     agent.Company = company;
                 }
-                    
+
                 return agent;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 logger.LogError(e.Message);
                 return null;
@@ -129,8 +158,8 @@ namespace DAL.Repositories
                 dbContext.Agents.Update(agent);
                 await dbContext.SaveChangesAsync();
                 return agent;
-            }  
-            catch(Exception e)
+            }
+            catch (Exception e)
             {
                 logger.LogError(e.Message);
                 return null;

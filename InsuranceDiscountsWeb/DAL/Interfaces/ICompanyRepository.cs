@@ -18,5 +18,7 @@ namespace DAL.Interfaces
         public Task<bool> Delete(Guid id);
 
         public Task<bool> Update(Company company);
+
+        public Task<List<Company>> SearchByName(string searchString);
     }
 }

@@ -3,6 +3,7 @@ using Core.Models;
 using Core.Models.UpdateModels;
 using InsuranceDiscountsWeb.ViewModels;
 using InsuranceDiscountsWeb.ViewModels.UpdateViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
@@ -27,6 +28,7 @@ namespace InsuranceDiscountsWeb.Controllers
         }
 
         [HttpGet("GetById")]
+        [Authorize]
         public async Task<IActionResult> GetById(Guid id)
         {
             try
@@ -49,6 +51,7 @@ namespace InsuranceDiscountsWeb.Controllers
         }
 
         [HttpGet("GetAll")]
+        [Authorize]
         public async Task<IActionResult> GetAll()
         {
             try
@@ -64,7 +67,25 @@ namespace InsuranceDiscountsWeb.Controllers
             }
         }
 
+        [HttpGet("SearchByName")]
+        [Authorize]
+        public async Task<IActionResult> SearchByName(string searchString)
+        {
+            try
+            {
+                var companies = await companyService.SearchByName(searchString);
+                var companyViews = convert(companies);
+                return Ok(companyViews);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.Message);
+                return BadRequest(e.Message);
+            }
+        }
+
         [HttpPost("Create")]
+        [Authorize("Admin")]
         public async Task<IActionResult> Create(CompanyViewModel companyViewModel)
         {
             if (!ModelState.IsValid)
@@ -91,7 +112,8 @@ namespace InsuranceDiscountsWeb.Controllers
             }
         }
 
-        [HttpDelete]
+        [HttpDelete("Delete")]
+        [Authorize (Roles = "Admin, Manager")]
         public async Task<IActionResult> Delete(Guid id)
         {
             try
@@ -105,7 +127,7 @@ namespace InsuranceDiscountsWeb.Controllers
 
                 return Ok($"company with id {id} successfully deleted");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 logger.LogError(e.Message);
                 return BadRequest(e.Message);
@@ -113,6 +135,7 @@ namespace InsuranceDiscountsWeb.Controllers
         }
 
         [HttpPut("Update")]
+        [Authorize (Roles = "Admin, Manager")]
         public async Task<IActionResult> Update(UpdateCompanyViewModel companyViewModel)
         {
             if (!ModelState.IsValid)
@@ -132,7 +155,7 @@ namespace InsuranceDiscountsWeb.Controllers
 
                 return Ok($"Company with id {companyViewModel.Id} updated successfully");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 logger.LogError(e.Message);
                 return BadRequest(e.Message);
@@ -176,7 +199,7 @@ namespace InsuranceDiscountsWeb.Controllers
                 Address = company.Address,
                 PhoneNumber = company.PhoneNumber,
                 EmailAddress = company.EmailAddress,
-                MaxDiscountPercentage= company.MaxDiscountPercentage,
+                MaxDiscountPercentage = company.MaxDiscountPercentage,
                 WebsiteAddress = company.WebsiteAddress
             };
         }
