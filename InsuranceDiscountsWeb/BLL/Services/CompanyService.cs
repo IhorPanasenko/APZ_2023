@@ -88,6 +88,22 @@ namespace BLL.Services
             }
         }
 
+        public async Task<List<Company>> SearchByName(string searchString)
+        {
+            List<Company> companies = new List<Company>();
+
+            try
+            {
+                companies = await companyRepository.SearchByName(searchString);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.Message);
+            }
+
+            return companies;
+        }
+
         public async Task<bool> Update(UpdateCompanyModel updateCompany)
         {
             try
