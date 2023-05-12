@@ -64,6 +64,22 @@ namespace InsuranceDiscountsWeb.Controllers
             }
         }
 
+        [HttpGet("SearchByName")]
+        public async Task<IActionResult> SearchByName(string searchString)
+        {
+            try
+            {
+                var companies = await companyService.SearchByName(searchString);
+                var companyViews = convert(companies);
+                return Ok(companyViews);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.Message);
+                return BadRequest(e.Message);
+            }
+        }
+
         [HttpPost("Create")]
         public async Task<IActionResult> Create(CompanyViewModel companyViewModel)
         {
@@ -105,7 +121,7 @@ namespace InsuranceDiscountsWeb.Controllers
 
                 return Ok($"company with id {id} successfully deleted");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 logger.LogError(e.Message);
                 return BadRequest(e.Message);
@@ -132,7 +148,7 @@ namespace InsuranceDiscountsWeb.Controllers
 
                 return Ok($"Company with id {companyViewModel.Id} updated successfully");
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 logger.LogError(e.Message);
                 return BadRequest(e.Message);
@@ -176,7 +192,7 @@ namespace InsuranceDiscountsWeb.Controllers
                 Address = company.Address,
                 PhoneNumber = company.PhoneNumber,
                 EmailAddress = company.EmailAddress,
-                MaxDiscountPercentage= company.MaxDiscountPercentage,
+                MaxDiscountPercentage = company.MaxDiscountPercentage,
                 WebsiteAddress = company.WebsiteAddress
             };
         }
