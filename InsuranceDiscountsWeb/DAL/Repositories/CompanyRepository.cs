@@ -95,6 +95,22 @@ namespace DAL.Repositories
             }
         }
 
+        public async Task<List<Company>> SearchByName(string searchString)
+        {
+            List<Company> companies = new List<Company>();
+
+            try
+            {
+                companies = await dbContext.Companies.Where(c=>c.CompanyName.Contains(searchString)).ToListAsync();
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.Message);
+            }
+
+            return companies;
+        }
+
         public async Task<bool> Update(Company company)
         {
             try
