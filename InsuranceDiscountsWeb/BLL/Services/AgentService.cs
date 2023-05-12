@@ -62,6 +62,22 @@ namespace BLL.Services
             }
         }
 
+        public async Task<List<Agent>> GetAgentsByCompany(Guid companyId)
+        {
+            List<Agent> agents = new List<Agent>();
+
+            try
+            {
+                agents = await agentRepository.GetAll();
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.Message);
+            }
+
+            return agents;
+        }
+
         public async Task<List<Agent>> GetAll()
         {
             List<Agent> agents = new List<Agent>();
