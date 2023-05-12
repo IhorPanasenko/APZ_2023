@@ -65,6 +65,23 @@ namespace InsuranceDiscountsWeb.Controllers
             }
         }
 
+        [HttpGet("GetAgentsByCompany")]
+        [Authorize]
+        public async Task<IActionResult> GetAgentsByCompany(Guid companyId)
+        {
+            try
+            {
+                var agents = await agentService.GetAgentsByCompany(companyId);
+                var agentViews = convert(agents);
+                return Ok(agentViews);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.Message);
+                return BadRequest(e.Message);
+            }
+        }
+
         [HttpPost("Create")]
         [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Create(AgentViewModel agentViewModel)
