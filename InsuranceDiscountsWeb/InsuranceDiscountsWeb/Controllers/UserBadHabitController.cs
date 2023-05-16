@@ -22,6 +22,7 @@ namespace InsuranceDiscountsWeb.Controllers
         }
 
         [HttpGet("GetAll")]
+        //[Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> GetAll()
         {
             try
@@ -39,6 +40,7 @@ namespace InsuranceDiscountsWeb.Controllers
         }
 
         [HttpGet("GetByUserId")]
+        //[Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> GetByUserId(Guid userId)
         {
             try
@@ -55,6 +57,7 @@ namespace InsuranceDiscountsWeb.Controllers
         }
 
         [HttpPost("Create")]
+        //[Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> Create(UserBadHabitViewModel viewModel)
         {
             if (!ModelState.IsValid)
@@ -82,6 +85,7 @@ namespace InsuranceDiscountsWeb.Controllers
         }
 
         [HttpDelete("Delete")]
+        //[Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> Delete(Guid id)
         {
             try
@@ -101,7 +105,6 @@ namespace InsuranceDiscountsWeb.Controllers
                 return BadRequest(e.Message);
             }
         }
-
 
         private UserBadHabits convert(UserBadHabitViewModel viewModel)
         {

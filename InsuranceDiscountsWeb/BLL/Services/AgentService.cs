@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace BLL.Services
 {
-    public class AgentService: IAgentService
+    public class AgentService : IAgentService
     {
         private readonly ILogger<AgentService> logger;
         private readonly IAgentRepository agentRepository;
@@ -32,16 +32,16 @@ namespace BLL.Services
         {
             try
             {
-                var resultAgent =await agentRepository.Create(agent);
-                
-                if(resultAgent is null)
+                var resultAgent = await agentRepository.Create(agent);
+
+                if (resultAgent is null)
                 {
                     return false;
                 }
 
                 return true;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 logger.LogError(e.Message);
                 return false;
@@ -55,7 +55,7 @@ namespace BLL.Services
                 var result = await agentRepository.Delete(id);
                 return result;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 logger.LogError(e.Message);
                 return false;
@@ -86,9 +86,9 @@ namespace BLL.Services
             {
                 agents = await agentRepository.GetAll();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                logger.LogError(e.Message);   
+                logger.LogError(e.Message);
             }
 
             return agents;
@@ -100,14 +100,14 @@ namespace BLL.Services
             {
                 var agent = await agentRepository.GetById(id);
 
-                if(agent == null)
+                if (agent == null)
                 {
                     throw new Exception($"Can't find agent with id: {id}\nSee console logging for more information");
                 }
 
                 return agent;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 logger.LogError(e.Message);
                 return null;
@@ -120,7 +120,7 @@ namespace BLL.Services
             {
                 var oldAgent = await agentRepository.GetById(updateAgentModel.Id);
 
-                if(oldAgent is null)
+                if (oldAgent is null)
                 {
                     throw new ArgumentException($"No agents with id {updateAgentModel.Id} was sfound for update");
                 }
@@ -129,7 +129,7 @@ namespace BLL.Services
                 var result = await agentRepository.Update(oldAgent);
                 return result;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 logger.LogError(e.Message);
                 return null;
@@ -147,7 +147,7 @@ namespace BLL.Services
             if (updateAgentModel.CompanyId != null)
             {
                 agent.CompanyId = (Guid)updateAgentModel.CompanyId;
-                agent.Company = await companyRepository.GetById(updateAgentModel.Id!) ;
+                agent.Company = await companyRepository.GetById((Guid)updateAgentModel.CompanyId);
             }
         }
     }

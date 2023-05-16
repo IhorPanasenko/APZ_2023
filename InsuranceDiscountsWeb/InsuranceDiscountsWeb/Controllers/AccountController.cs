@@ -67,6 +67,7 @@ namespace InsuranceDiscountsWeb.Controllers
         }
 
         [HttpPost("Login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginViewModel loginViewModel)
         {
             if (!ModelState.IsValid)
@@ -88,8 +89,8 @@ namespace InsuranceDiscountsWeb.Controllers
             }
         }
 
-        [Authorize]
         [HttpPost("LogOut")]
+        //[Authorize]
         public async Task<IActionResult> LogOut()
         {
             try
@@ -104,6 +105,7 @@ namespace InsuranceDiscountsWeb.Controllers
         }
 
         [HttpPost("ForgotPassword")]
+        [AllowAnonymous]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel forgotPassword)
         {
             if (!ModelState.IsValid)
@@ -125,6 +127,7 @@ namespace InsuranceDiscountsWeb.Controllers
         }
 
         [HttpPost("ResetPassword")]
+        [AllowAnonymous]
         public async Task<IActionResult> ResetPassword([FromBody]ResetPasswordViewModel resetPasswordViewModel)
         {
             if (!ModelState.IsValid)

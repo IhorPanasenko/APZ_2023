@@ -25,6 +25,7 @@ namespace InsuranceDiscountsWeb.Controllers
         }
 
         [HttpGet("GetAll")]
+        //[Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> GetAll()
         {
             try
@@ -41,6 +42,7 @@ namespace InsuranceDiscountsWeb.Controllers
         }
 
         [HttpGet("GetById")]
+        //[Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> GetById(Guid id)
         {
             try
@@ -62,7 +64,8 @@ namespace InsuranceDiscountsWeb.Controllers
             }
         }
 
-        [HttpGet("GetByuserId")]
+        [HttpGet("GetByUserId")]
+        //[Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> GetByUserId(Guid userId)
         {
             try
@@ -100,7 +103,7 @@ namespace InsuranceDiscountsWeb.Controllers
             }
         }
 
-        [HttpDelete("Deelte")]
+        [HttpDelete("Delete")]
         public async Task<IActionResult> Delete(Guid id)
         {
             try

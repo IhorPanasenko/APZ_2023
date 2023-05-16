@@ -2,6 +2,7 @@
 using DAL;
 using InsuranceDiscountsWeb.ViewModels;
 using InsuranceDiscountsWeb.ViewModels.UpdateViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -32,6 +33,7 @@ namespace InsuranceDiscountsWeb.Controllers
         }
 
         [HttpGet("GetAll")]
+        //[Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> GetAll()
         {
             try
@@ -47,6 +49,7 @@ namespace InsuranceDiscountsWeb.Controllers
         }
 
         [HttpGet("GetByName")]
+        //[Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> GetByName(string roleName)
         {
             try
@@ -63,6 +66,7 @@ namespace InsuranceDiscountsWeb.Controllers
 
 
         [HttpPost("Create")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(RoleViewModel roleViewModel)
         {
             if (!ModelState.IsValid)
@@ -94,7 +98,7 @@ namespace InsuranceDiscountsWeb.Controllers
         }
 
         [HttpPost("Update")]
-        [ValidateAntiForgeryToken]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(RoleUpdateViewModel roleViewModel)
         {
             if (!ModelState.IsValid)
@@ -127,8 +131,8 @@ namespace InsuranceDiscountsWeb.Controllers
             }
         }
 
-        [HttpDelete]
-        [ValidateAntiForgeryToken]
+        [HttpDelete("Delete")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(string id)
         {
             try
