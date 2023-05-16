@@ -45,7 +45,7 @@ builder.Services.AddSwaggerGen(c =>
                     Id = "Bearer"
                 }
             },
-            Array.Empty<string>()
+            new string[]{ }
         }
     });
 });
@@ -104,6 +104,8 @@ builder.Services.AddScoped<IPeriodicMeasurmentsRepository, PeriodicMeasurmentsRe
 builder.Services.AddScoped<IBadHabitRepository, BadHabitRepository>();
 builder.Services.AddScoped<IUserBadHabitRepository, UserBadHabitRepository>();
 builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
+builder.Services.AddScoped<IPolicyRepository, PolicyRepository>();
+builder.Services.AddScoped<IUserPoliciesRepository, UserPoliciesRepository>();
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
@@ -116,6 +118,8 @@ builder.Services.AddScoped<IPeriodicMeasurmentsService, PeriodicMeasurmentsServi
 builder.Services.AddScoped<IBadHabitService, BadHabitService>();
 builder.Services.AddScoped<IUserBadHabitService, UserBadHabitService>();
 builder.Services.AddScoped<IActivityService, ActivityService>();
+builder.Services.AddScoped<IPolicyService, PolicyService>();
+builder.Services.AddScoped<IUserPolicyService, UserPolicyService>();
 
 builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration.GetSection("SendGrid"));
 
