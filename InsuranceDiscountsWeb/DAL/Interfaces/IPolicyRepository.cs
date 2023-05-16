@@ -9,9 +9,9 @@ namespace DAL.Interfaces
 {
     public interface IPolicyRepository
     {
-        public Task<bool> Create(Policy policy);
+        public Task<Policy?> Create(Policy policy);
 
-        public Task<bool> Update(Policy policy);
+        public Task<Policy?> Update(Policy policy);
 
         public Task<List<Policy>> GetAll();
 
