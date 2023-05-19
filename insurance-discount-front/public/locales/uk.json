@@ -1,0 +1,9 @@
+{
+    "login": "Увійти",
+    "emailAddress": "Електронна адреса",
+    "password": "Пароль",
+    "loginButton": "Увійти",
+    "invalidCredentials": "Неправильна електронна адреса або пароль",
+    "requiredField": "Це поле обов'язкове"
+  }
+  
