@@ -1,3 +1,23 @@
 {
-    "hello":"Привіт"
+    "login": "Увійти",
+    "emailAddress": "Електронна адреса",
+    "password": "Пароль",
+    "loginButton": "Увійти",
+    "invalidCredentials": "Неправильна електронна адреса або пароль",
+    "requiredField": "Це поле обов'язкове",
+    "registration": "Реєстрація",
+    "authorization": "Авторизація",
+    "about": "Про нас",
+    "registrationPage": {
+        "title": "Реєстрація",
+        "email": "Email",
+        "userName": "Ім'я користувача",
+        "password": "Пароль",
+        "confirmPassword": "Підтвердити пароль",
+        "register": "Зареєструватися",
+        "requiredFieldsError": "Будь ласка, заповніть всі обов'язкові поля.",
+        "passwordMismatchError": "Паролі не співпадають.",
+        "passwordFormatError": "Пароль повинен містити принаймні 1 велику літеру, 1 цифру та 1 спеціальний символ.",
+        "registrationError": "Помилка реєстрації. Будь ласка, спробуйте ще раз."
+    }
 }
