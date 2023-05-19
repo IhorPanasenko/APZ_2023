@@ -157,7 +157,7 @@ namespace DAL.Repositories
 
         private async Task addUserInfoToPeriodicMeasurments(PeriodicMeasurments periodicMeasurments)
         {
-            var user = await dbContext.AppUsers.FindAsync(periodicMeasurments.UserId);
+            var user = await dbContext.AppUsers.FindAsync(periodicMeasurments.UserId.ToString());
 
             if (user is not null)
             {
