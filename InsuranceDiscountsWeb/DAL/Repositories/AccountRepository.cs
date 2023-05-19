@@ -45,7 +45,7 @@ namespace DAL.Repositories
 
                 if (!result.Succeeded)
                 {
-                    throw new Exception(result.Errors.ToString());
+                    throw new Exception(result.Errors.ToList()[0].ToString());
                 }
 
                 await checkRole(registerModel.Role);

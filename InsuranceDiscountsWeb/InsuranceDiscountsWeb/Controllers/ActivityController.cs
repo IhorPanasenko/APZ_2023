@@ -27,6 +27,7 @@ namespace InsuranceDiscountsWeb.Controllers
         }
 
         [HttpGet("GetAll")]
+        //[Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> GetAll()
         {
             try
@@ -43,6 +44,7 @@ namespace InsuranceDiscountsWeb.Controllers
         }
 
         [HttpGet("GetById")]
+        //[Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> GetById(Guid id)
         {
             try
@@ -65,6 +67,7 @@ namespace InsuranceDiscountsWeb.Controllers
         }
 
         [HttpGet("GetByuserId")]
+        //[Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> GetByUserId(Guid userId)
         {
             try
@@ -81,6 +84,7 @@ namespace InsuranceDiscountsWeb.Controllers
         }
 
         [HttpPost("Create")]
+        //[Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> Create(ActivityViewModel activityViewModel)
         {
             try
@@ -102,7 +106,8 @@ namespace InsuranceDiscountsWeb.Controllers
             }
         }
 
-        [HttpDelete("Deelte")]
+        [HttpDelete("Delete")]
+        //[Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> Delete(Guid id)
         {
             try
@@ -124,6 +129,7 @@ namespace InsuranceDiscountsWeb.Controllers
         }
 
         [HttpPut("Update")]
+        //[Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> Update(UpdateActivityViewModel updateViewModel)
         {
             try

@@ -49,7 +49,7 @@ namespace BLL.Services
 
             if (user is null)
             {
-                throw new ArgumentException("User with such doesn't exist");
+                throw new ArgumentException($"User with such email {loginModel.Email} doesn't exist");
             }
 
             var result = await userManager.CheckPasswordAsync(user, loginModel.Password);            

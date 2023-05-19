@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using Core.Models;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
-namespace Core.Models
+namespace InsuranceDiscountsWeb.ViewModels
 {
-    public class Policy
+    public class PolicyViewModel
     {
-        [Key]
         public Guid Id { get; set; } = Guid.NewGuid();
 
         [Required]
@@ -28,12 +23,10 @@ namespace Core.Models
         [Required]
         public int TimePeriod { get; set; } = 12;
 
-        [ForeignKey("CompanyId")]
         public Guid CompanyId { get; set; }
 
         public Company? Company { get; set; }
 
-        [ForeignKey("CategoryId")]
         public Guid CategoryId { get; set; }
 
         public Category? Category { get; set; }

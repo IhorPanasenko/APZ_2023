@@ -51,7 +51,7 @@ namespace InsuranceDiscountsWeb.Controllers
         }
 
         [HttpGet("GetAll")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> GetAll()
         {
             try
@@ -68,7 +68,7 @@ namespace InsuranceDiscountsWeb.Controllers
         }
 
         [HttpGet("SearchByName")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> SearchByName(string searchString)
         {
             try
@@ -85,7 +85,7 @@ namespace InsuranceDiscountsWeb.Controllers
         }
 
         [HttpPost("Create")]
-        [Authorize("Admin")]
+        //[Authorize("Admin")]
         public async Task<IActionResult> Create(CompanyViewModel companyViewModel)
         {
             if (!ModelState.IsValid)
@@ -113,7 +113,7 @@ namespace InsuranceDiscountsWeb.Controllers
         }
 
         [HttpDelete("Delete")]
-        [Authorize (Roles = "Admin, Manager")]
+        //[Authorize (Roles = "Admin, Manager")]
         public async Task<IActionResult> Delete(Guid id)
         {
             try
@@ -135,7 +135,7 @@ namespace InsuranceDiscountsWeb.Controllers
         }
 
         [HttpPut("Update")]
-        [Authorize (Roles = "Admin, Manager")]
+        //[Authorize (Roles = "Admin, Manager")]
         public async Task<IActionResult> Update(UpdateCompanyViewModel companyViewModel)
         {
             if (!ModelState.IsValid)

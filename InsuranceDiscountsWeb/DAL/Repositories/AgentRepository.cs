@@ -132,7 +132,7 @@ namespace DAL.Repositories
 
                 if (agent is null)
                 {
-                    throw new Exception("Can't create new Agents");
+                    throw new Exception($"Can't get Agent with id {id}");
                 }
 
                 var company = await dbContext.Companies.FindAsync(agent.CompanyId);
