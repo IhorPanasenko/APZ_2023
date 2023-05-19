@@ -1,3 +1,23 @@
 {
-    "hello":"hello"
+    "registration": "Registration",
+    "authorization": "Authorization",
+    "about": "About Us",
+    "login": "Log in",
+    "emailAddress": "Email Address",
+    "password": "Password",
+    "loginButton": "Login",
+    "invalidCredentials": "Invalid email or password",
+    "requiredField": "This field is required",
+    "registrationPage": {
+        "title": "Registration",
+        "email": "Email",
+        "userName": "User Name",
+        "password": "Password",
+        "confirmPassword": "Confirm Password",
+        "register": "Register",
+        "requiredFieldsError": "Please fill in all required fields.",
+        "passwordMismatchError": "Passwords do not match.",
+        "passwordFormatError": "Password must contain at least 1 uppercase letter, 1 number, and 1 special symbol.",
+        "registrationError": "Registration failed. Please try again."
+    }
 }
