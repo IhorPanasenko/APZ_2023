@@ -1,0 +1,9 @@
+.agent-card {
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  
+  .agent-card:hover {
+    transform: scale(1.05);
+  }
+  
