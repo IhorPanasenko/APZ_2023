@@ -36,6 +36,8 @@ namespace DAL
 
         public DbSet<BadHabit> BadHabits { get; set; }
 
+        public DbSet<AgentRaiting> AgentRaitings { get; set; }
+
         public InsuranceDiscountsDbContext(DbContextOptions<InsuranceDiscountsDbContext> options) : base(options)
         {
 

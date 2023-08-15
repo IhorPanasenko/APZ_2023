@@ -133,7 +133,7 @@ namespace DAL.Services
 
                 if (!result.Succeeded)
                 {
-                    throw new Exception("error in server update");
+                    throw new Exception("error in server update" + result.Errors.ToList()[0].ToString());
                 }
 
                 await dbContext.SaveChangesAsync();

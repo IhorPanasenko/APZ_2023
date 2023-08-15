@@ -1,9 +1,9 @@
 ﻿using Core.Models;
 using DAL.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -99,7 +99,7 @@ namespace DAL.Repositories
                 foreach (var userBad in userBadHabits)
                 {
                     var habit = await dbContext.BadHabits.FindAsync(userBad.BadHabitId);
-                    var user = await dbContext.AppUsers.FindAsync(userBad.UserId);
+                    var user = await dbContext.AppUsers.FindAsync(userBad.UserId.ToString());
 
                     userBad.BadHabit = habit;
                     userBad.AppUser = user;

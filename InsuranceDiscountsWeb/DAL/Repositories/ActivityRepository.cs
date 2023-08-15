@@ -1,9 +1,9 @@
 ﻿using Core.Models;
 using DAL.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -157,7 +157,7 @@ namespace DAL.Repositories
 
         private async Task addUserInfoToActivity(Activity activity)
         {
-            var user = await dbContext.AppUsers.FindAsync(activity.UserId);
+            var user = await dbContext.AppUsers.FindAsync(activity.UserId.ToString());
 
             if (user is not null)
             {

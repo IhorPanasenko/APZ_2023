@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">insurance_discounts</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="open_nav">Open Navigation</string>
+    <string name="close_nav">Close Navigation</string>
+
+    <string name="about_us_title">About Us</string>
+    <string name="introduction_title">Welcome to our Insurance Discounts company!</string>
+    <string name="introduction_description">Our company provides discounts to clients of insurance companies based on the way of life a person leads. We collect data about the lifestyle through a special authors smart device that the client is required to wear.</string>
+    <string name="benefits_title">Benefits</string>
+    <string name="benefits_item1">Significant discounts on insurance services</string>
+    <string name="benefits_item2">Automatic lifestyle data collection</string>
+    <string name="benefits_item3">Personalized recommendations and services</string>
+    <string name="satisfied_customers_title">Satisfied Customers</string>
+    <string name="customer1_name">John Doe</string>
+    <string name="customer1_feedback">Very satisfied with the discounts received. Now I can save on insurance payments and spend money on my favorite activities.</string>
+    <string name="customer2_name">Jane Smith</string>
+    <string name="customer2_feedback">"Great company with very useful services. I've never received such benefits from my lifestyle before."</string>
+
+</resources>

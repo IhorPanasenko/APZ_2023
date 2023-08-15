@@ -51,11 +51,21 @@ namespace InsuranceDiscountsWeb.Controllers
 
         [HttpGet("GetAll")]
         ///[Authorize]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(
+            string? searchString = null,
+            string? sortParameter = null,
+            string? sortDirection = null, 
+            Guid? categoryId = null,
+            Guid? companyId = null, 
+            double? minCoverageAmount = null, 
+            double? maxCoverageAmount = null, 
+            double? minPrice = null, 
+            double? maxPrice = null
+            )
         {
             try
             {
-                var policies = await policyService.GetAll();
+                var policies = await policyService.GetAll(searchString, sortParameter, sortDirection, categoryId, companyId, minCoverageAmount, maxCoverageAmount, minPrice, maxPrice);
                 var policiesViews = convert(policies);
                 return Ok(policiesViews);
             }

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace BLL.Services
 {
-    public class PolicyService:IPolicyService
+    public class PolicyService : IPolicyService
     {
         private readonly ILogger<AgentService> logger;
         private readonly IPolicyRepository policyRepository;
@@ -39,7 +39,7 @@ namespace BLL.Services
 
                 if (resultPolicy is null)
                 {
-                    throw new Exception ("No policy was create in DAL layer see logging");
+                    throw new Exception("No policy was create in DAL layer see logging");
                 }
 
                 return resultPolicy;
@@ -65,13 +65,23 @@ namespace BLL.Services
             }
         }
 
-        public async Task<List<Policy>> GetAll()
+        public async Task<List<Policy>> GetAll(
+            string? searchString = null,
+            string? sortParameter = null,
+            string? sortDirection = null,
+            Guid? categoryId = null,
+            Guid? companyId = null,
+            double? minCoverageAmount = null,
+            double? maxCoverageAmount = null,
+            double? minPrice = null,
+            double? maxPrice = null
+            )
         {
             List<Policy> policies = new List<Policy>();
 
             try
             {
-                policies = await policyRepository.GetAll();
+                policies = await policyRepository.GetAll(searchString, sortParameter, sortDirection, categoryId, companyId, minCoverageAmount, maxCoverageAmount, minPrice, maxPrice);
             }
             catch (Exception e)
             {
@@ -85,7 +95,7 @@ namespace BLL.Services
         {
             try
             {
-                var policy= await policyRepository.GetById(id);
+                var policy = await policyRepository.GetById(id);
 
                 if (policy == null)
                 {
@@ -127,17 +137,17 @@ namespace BLL.Services
         {
             oldPolicy.Name = String.IsNullOrEmpty(updatePolicy.Name) ? oldPolicy.Name : updatePolicy.Name;
             oldPolicy.Description = String.IsNullOrEmpty(updatePolicy.Description) ? oldPolicy.Description : updatePolicy.Description;
-            oldPolicy.CoverageAmount = updatePolicy.CoverageAmount <=0 ?oldPolicy.CoverageAmount : updatePolicy.CoverageAmount;
+            oldPolicy.CoverageAmount = updatePolicy.CoverageAmount <= 0 ? oldPolicy.CoverageAmount : updatePolicy.CoverageAmount;
             oldPolicy.Price = updatePolicy.Price <= 0 ? oldPolicy.Price : updatePolicy.Price;
             oldPolicy.TimePeriod = updatePolicy.TimePeriod <= 0 ? oldPolicy.TimePeriod : updatePolicy.TimePeriod;
 
-            if(updatePolicy.CompanyId != null)
+            if (updatePolicy.CompanyId != null)
             {
                 oldPolicy.CompanyId = (Guid)updatePolicy.CompanyId;
                 oldPolicy.Company = await companyRepository.GetById((Guid)updatePolicy.CompanyId);
             }
 
-            if(updatePolicy.CategoryId != null)
+            if (updatePolicy.CategoryId != null)
             {
                 oldPolicy.CategoryId = (Guid)updatePolicy.CategoryId;
                 oldPolicy.Category = await categoryRepository.GetById((Guid)updatePolicy.CategoryId);

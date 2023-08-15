@@ -89,6 +89,25 @@ namespace InsuranceDiscountsWeb.Migrations
                     b.ToTable("Agents");
                 });
 
+            modelBuilder.Entity("Core.Models.AgentRaiting", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("AgentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("SingleRaiting")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AgentId");
+
+                    b.ToTable("AgentRaitings");
+                });
+
             modelBuilder.Entity("Core.Models.BadHabit", b =>
                 {
                     b.Property<Guid>("Id")
@@ -605,6 +624,17 @@ namespace InsuranceDiscountsWeb.Migrations
                         .IsRequired();
 
                     b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("Core.Models.AgentRaiting", b =>
+                {
+                    b.HasOne("Core.Models.Agent", "Agent")
+                        .WithMany()
+                        .HasForeignKey("AgentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Agent");
                 });
 
             modelBuilder.Entity("Core.Models.Nutrition", b =>

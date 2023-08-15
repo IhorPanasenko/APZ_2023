@@ -1,6 +1,7 @@
 ﻿using BLL.Interfaces;
 using Core.Models;
 using DAL.Interfaces;
+using DAL.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +27,7 @@ namespace BLL.Services
         private readonly IAccountRepository accountRepository;
         private readonly IConfiguration configuration;
         private readonly ISendGridEmail sendGridEmail;
+        private readonly IUserRepository userRepository;
 
         public AccountService(
             UserManager<AppUser> userManager, 
@@ -33,7 +35,8 @@ namespace BLL.Services
             ILogger<AccountService> logger, 
             IAccountRepository accountRepository, 
             IConfiguration configuration,
-            ISendGridEmail sendGridEmail)
+            ISendGridEmail sendGridEmail,
+            IUserRepository userRepository)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
@@ -41,11 +44,13 @@ namespace BLL.Services
             this.accountRepository = accountRepository;
             this.configuration = configuration;
             this.sendGridEmail = sendGridEmail;
+            this.userRepository = userRepository;
         }
 
         public async Task<string> LogIn(LoginModel loginModel)
         {
-            var user = await userManager.FindByEmailAsync(loginModel.Email);
+            //var user = await userManager.FindByEmailAsync(loginModel.Email);
+            var user = await userRepository.GetUserByEmail(loginModel.Email);
 
             if (user is null)
             {
@@ -110,6 +115,7 @@ namespace BLL.Services
         public async Task<string> ForgotPassword(string email)
         {
             var user = await userManager.FindByEmailAsync(email);
+            
 
             if (user is null)
             {
@@ -118,7 +124,7 @@ namespace BLL.Services
 
             var code = await userManager.GeneratePasswordResetTokenAsync(user);
 
-            await sendGridEmail.SendEmailAsync(email, "Reset Email confirmation", "Please, Reset your email + Link");  //TODO: Add link to page for reset Password
+            await sendGridEmail.SendEmailAsync(email, "Reset Email confirmation", $"Please, Reset your email by Link: http://localhost:3000/ResetPassword\nYou will need to paste a code: {code}");  //TODO: Add link to page for reset Password
 
             return code;
         }
@@ -148,6 +154,7 @@ namespace BLL.Services
                 new Claim("Email", user.Email),
                 new Claim ("UserName", user.UserName),
                 new Claim("UserId", user.Id),
+                new Claim("Role", user.UserRoles.ToList()[0])
             };
 
             try
