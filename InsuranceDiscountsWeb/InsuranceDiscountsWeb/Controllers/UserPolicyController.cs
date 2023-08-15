@@ -40,6 +40,24 @@ namespace InsuranceDiscountsWeb.Controllers
             }
         }
 
+        [HttpGet("GetUsersByCompany")]
+        //[Authorize(Roles = "Admin, "Maanger" ,User")]
+        public async Task<IActionResult> GetUsersByCompany(Guid companyId)
+        {
+            try
+            {
+                var res = await userPoliciesService.GetUsersByCompany(companyId);
+                var view = convert(res);
+
+                return Ok(view);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.Message);
+                return BadRequest(e.Message);
+            }
+        }
+
         [HttpGet("GetByUserId")]
         //[Authorize(Roles = "Admin, User")]
         public async Task<IActionResult> GetByUserId(Guid userId)
@@ -106,6 +124,8 @@ namespace InsuranceDiscountsWeb.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        
 
         private UserPolicies convert(UserPolicyViewModel viewModel)
         {

@@ -28,7 +28,7 @@ namespace InsuranceDiscountsWeb.Controllers
         }
 
         [HttpGet("GetById")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> GetById(Guid id)
         {
             try

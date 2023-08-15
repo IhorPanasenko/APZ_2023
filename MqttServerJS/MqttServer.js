@@ -1,10 +1,9 @@
 const mqtt = require('mqtt');
 const axios = require('axios');
 const https = require('https');
-//process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 https.globalAgent.options.rejectUnauthorized = false;
 
-const mqttBroker = 'mqtt://172.24.176.1:1883';
+const mqttBroker = 'mqtt://172.29.208.1:1883';
 const mqttTopic = 'topic1';
 const mqttOptions = {
   clientId: '1',
@@ -47,9 +46,7 @@ async function sendPayloadToServer(payload) {
       },
     });
 
-    console.log('HTTP POST request sent to the application server');
-    console.log('Response:');
-    console.log(response.data);
+    console.log('HTTP POST request succesfully sent to the application server');
   } catch (error) {
     console.error('Failed to send HTTP POST request to the application server:', error);
   }

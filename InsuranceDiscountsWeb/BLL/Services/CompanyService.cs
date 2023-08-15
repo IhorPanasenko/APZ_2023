@@ -28,7 +28,7 @@ namespace BLL.Services
         {
             try
             {
-                var res =await companyRepository.Create(company);
+                var res = await companyRepository.Create(company);
 
                 if(res is null)
                 {

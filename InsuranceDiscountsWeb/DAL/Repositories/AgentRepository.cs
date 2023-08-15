@@ -16,17 +16,17 @@ namespace DAL.Repositories
     {
         private readonly ILogger<AgentRepository> logger;
         private readonly InsuranceDiscountsDbContext dbContext;
-        private readonly ICompanyRepository companyRepository;
+        private readonly IAgentRaitingRepository agentRaitingRepository;
 
         public AgentRepository(
             ILogger<AgentRepository> logger,
             InsuranceDiscountsDbContext dbContext,
-            ICompanyRepository companyRepository
+            IAgentRaitingRepository agentRaitingRepository
             )
         {
+            this.agentRaitingRepository = agentRaitingRepository;
             this.logger = logger;
             this.dbContext = dbContext;
-            this.companyRepository = companyRepository;
         }
 
         public async Task<Agent?> Create(Agent agent)
@@ -85,9 +85,10 @@ namespace DAL.Repositories
 
                 var temp_agents = await dbContext.Agents.Where(a => a.CompanyId == companyId).ToListAsync();
 
-                foreach (var agent in agents)
+                foreach (var agent in temp_agents)
                 {
                     agent.Company = company;
+                    agents.Add(agent);
                 }
             }
             catch (Exception e)
@@ -108,6 +109,9 @@ namespace DAL.Repositories
 
                 foreach (var agent in agents)
                 {
+                    var raiting = await calculateRaiting(agent.Id);
+                    agent.Raiting = raiting;
+
                     var company = await dbContext.Companies.FindAsync(agent.CompanyId);
 
                     if (company is not null)
@@ -134,6 +138,9 @@ namespace DAL.Repositories
                 {
                     throw new Exception($"Can't get Agent with id {id}");
                 }
+
+                var raiting = await calculateRaiting(id);
+                agent.Raiting = raiting;
 
                 var company = await dbContext.Companies.FindAsync(agent.CompanyId);
 
@@ -163,6 +170,19 @@ namespace DAL.Repositories
             {
                 logger.LogError(e.Message);
                 return null;
+            }
+        }
+
+        private async Task<double> calculateRaiting(Guid agentId)
+        {
+            var raiting = await agentRaitingRepository.GetAgentRaiting(agentId);
+            if (raiting.Count == 0)
+            {
+                return 0;
+            }
+            else
+            {
+                return raiting.Average(ar => ar.SingleRaiting);
             }
         }
     }

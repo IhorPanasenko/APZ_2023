@@ -89,5 +89,21 @@ namespace BLL.Services
 
             return userPoliciess;
         }
+
+        public async Task<List<UserPolicies>> GetUsersByCompany(Guid companyId)
+        {
+            List<UserPolicies> userPolicies = new List<UserPolicies>();
+
+            try
+            {
+                userPolicies = await userPoliciesRepository.GetUsersByCompany(companyId);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.Message);
+            }
+
+            return userPolicies;
+        }
     }
 }

@@ -148,7 +148,8 @@ namespace InsuranceDiscountsWeb.Controllers
                 var usersInRole = dbContext.UserRoles.Where(u => u.RoleId == id).Count();
                 if (usersInRole > 0)
                 {
-
+                    logger.LogError("Can't delete role while users with such role exists");
+                    return BadRequest("Can't delete role while users with such role exists");
                 }
 
                 await roleManager.DeleteAsync(dbRole);

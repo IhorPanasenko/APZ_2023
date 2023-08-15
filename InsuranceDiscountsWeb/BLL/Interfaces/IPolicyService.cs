@@ -12,7 +12,7 @@ namespace BLL.Interfaces
     {
         public Task<Policy?> GetById(Guid id);
 
-        public Task<List<Policy>> GetAll();
+        public Task<List<Policy>> GetAll(string? searchString = null, string? sortParameter = null, string? sortDirection = null, Guid? categoryId = null, Guid? companyId = null, double? minCoverageAmount = null, double? maxCoverageAmount = null, double? minPrice = null, double? maxPrice = null);
 
         public Task<Policy?> Create(Policy policy);
 

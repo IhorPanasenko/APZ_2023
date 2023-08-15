@@ -13,6 +13,7 @@ namespace Core.Models
         [Key]
         public Guid Id { get; set; } = Guid.NewGuid();  
 
+
         [Required]
         public string FirstName { get; set; } = String.Empty;
 

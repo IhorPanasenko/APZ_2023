@@ -17,5 +17,7 @@ namespace DAL.Interfaces
 
         public Task<List<UserPolicies>> GetByUser(Guid userId);
 
+        public Task<List<UserPolicies>> GetUsersByCompany(Guid companyId);
+
     }
 }

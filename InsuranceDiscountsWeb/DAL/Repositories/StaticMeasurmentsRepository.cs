@@ -157,7 +157,7 @@ namespace DAL.Repositories
 
         private async Task addUserInfoToStaticMeasurments(StaticMeasurments staticMeasurments)
         {
-            var user = await dbContext.AppUsers.FindAsync(staticMeasurments.UserId);
+            var user = await dbContext.AppUsers.FindAsync(staticMeasurments.UserId.ToString());
 
             if (user is not null)
             {

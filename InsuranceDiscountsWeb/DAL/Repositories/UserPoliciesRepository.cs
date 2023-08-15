@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,6 +29,10 @@ namespace DAL.Repositories
         {
             try
             {
+                var policy = await dbContext.Policies.FindAsync(userPoliciess.PolicyId) ?? throw new Exception($"Policy with id {userPoliciess.PolicyId} doesn't exist");
+                var period = policy.TimePeriod;
+                userPoliciess.EndDate = userPoliciess.StartDate;
+                userPoliciess.EndDate = userPoliciess.EndDate.AddMonths( period );
                 await dbContext.UserPolicies.AddAsync(userPoliciess);
                 await dbContext.SaveChangesAsync();
 
@@ -74,7 +79,7 @@ namespace DAL.Repositories
                 foreach (var userPolicy in userPoliciess)
                 {
                     var habit = await dbContext.Policies.FindAsync(userPolicy.PolicyId);
-                    var user = await dbContext.AppUsers.FindAsync(userPolicy.UserId);
+                    var user = await dbContext.AppUsers.FindAsync(userPolicy.UserId.ToString());
 
                     userPolicy.Policy = habit;
                     userPolicy.AppUser = user;
@@ -99,11 +104,39 @@ namespace DAL.Repositories
                 foreach (var userPolicy in userPoliciess)
                 {
                     var habit = await dbContext.Policies.FindAsync(userPolicy.PolicyId);
-                    var user = await dbContext.AppUsers.FindAsync(userPolicy.UserId);
+                    var user = await dbContext.AppUsers.FindAsync(userPolicy.UserId.ToString());
 
                     userPolicy.Policy = habit;
                     userPolicy.AppUser = user;
                 }
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e.Message);
+            }
+
+            return userPoliciess;
+        }
+
+        public async Task<List<UserPolicies>> GetUsersByCompany(Guid companyId)
+        {
+            List<UserPolicies> userPoliciess = new List<UserPolicies>();
+
+            try
+            {
+                userPoliciess = await dbContext.UserPolicies.ToListAsync();
+
+                foreach (var userPolicy in userPoliciess)
+                {
+                    var policy = await dbContext.Policies.FindAsync(userPolicy.PolicyId);
+                    var user = await dbContext.AppUsers.FindAsync(userPolicy.UserId.ToString());
+
+
+                    userPolicy.Policy = policy;
+                    userPolicy.AppUser = user;
+                }
+
+                userPoliciess = userPoliciess.Where(up => up.Policy!.CompanyId == companyId).DistinctBy(up=>up.UserId).ToList();
             }
             catch (Exception e)
             {

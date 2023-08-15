@@ -16,5 +16,7 @@ namespace BLL.Interfaces
         public Task<List<UserPolicies>> GetAll();
 
         public Task<List<UserPolicies>> GetByUser(Guid userId);
+
+        public Task<List<UserPolicies>> GetUsersByCompany(Guid companyId);
     }
 }

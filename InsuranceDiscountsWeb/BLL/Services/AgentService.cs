@@ -68,7 +68,7 @@ namespace BLL.Services
 
             try
             {
-                agents = await agentRepository.GetAll();
+                agents = await agentRepository.GetAgentsByCompany(companyId);
             }
             catch (Exception e)
             {

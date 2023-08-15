@@ -121,7 +121,7 @@ namespace BLL.Services
 
             try
             {
-                activitys = await activityRepository.GetAll();
+                activitys = await activityRepository.UserActivities(userId);
             }
             catch (Exception e)
             {

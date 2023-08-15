@@ -106,6 +106,7 @@ builder.Services.AddScoped<IUserBadHabitRepository, UserBadHabitRepository>();
 builder.Services.AddScoped<IActivityRepository, ActivityRepository>();
 builder.Services.AddScoped<IPolicyRepository, PolicyRepository>();
 builder.Services.AddScoped<IUserPoliciesRepository, UserPoliciesRepository>();
+builder.Services.AddScoped<IAgentRaitingRepository, AgentRaitingRepository>();
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
@@ -120,6 +121,7 @@ builder.Services.AddScoped<IUserBadHabitService, UserBadHabitService>();
 builder.Services.AddScoped<IActivityService, ActivityService>();
 builder.Services.AddScoped<IPolicyService, PolicyService>();
 builder.Services.AddScoped<IUserPolicyService, UserPolicyService>();
+builder.Services.AddScoped<IAgentRaitingService, AgentRaitingService>();
 
 builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration.GetSection("SendGrid"));
 
